@@ -1,0 +1,22 @@
+logging:
+  level:
+    root: INFO
+    org.springframework: DEBUG
+spring:
+  application:
+    name: "auth-service"
+server:
+  port: 8443
+  address: social.media
+  ssl:
+    key-store: classpath:social-media-ssl.p12
+    key-store-password: kola1000
+    key-alias: social.media
+    enabled: true
+auth0:
+  domain: "tutuadame.eu.auth0.com"
+  connection: "Username-Password-Authentication"
+  audience: "https://tutuadame.eu.auth0.com/api/v2/"
+  management:
+    clientId: "iIOTeR3iT6zqmaHMRcCQsGOkObiMZNFz"
+    clientSecret: "eqn006XN9cbTrMp3u658XTG_R2XDncHTVDvvH0ZDmEQHMv--p31J8lkaz_lmZ5Nm"

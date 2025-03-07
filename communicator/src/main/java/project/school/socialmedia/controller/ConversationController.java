@@ -1,0 +1,64 @@
+package project.school.socialmedia.controller;
+
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import project.school.socialmedia.dao.Conversation;
+import project.school.socialmedia.dto.request.conversation.CreateConversationRequest;
+import project.school.socialmedia.dto.request.conversation.GetConversationsRequest;
+import project.school.socialmedia.dto.request.conversation.UpdateNamingRequest;
+import project.school.socialmedia.dto.response.conversation.SimpleConversationResponse;
+import project.school.socialmedia.service.ConversationService;
+
+import java.sql.SQLIntegrityConstraintViolationException;
+
+@RestController
+@RequestMapping("/conversationApi")
+@AllArgsConstructor
+@CrossOrigin(origins = "https://social.media:3000")
+public class ConversationController {
+
+  private final ConversationService conversationService;
+
+  @DeleteMapping("/{conversationId}")
+  public ResponseEntity<String> deleteConversation(
+          @PathVariable long conversationId
+  ) {
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(
+            conversationService.delete(conversationId)
+    );
+  }
+
+  @PatchMapping("/naming/{conversationId}")
+  public ResponseEntity<SimpleConversationResponse> updateConversationName(
+          @PathVariable long conversationId,
+          @RequestBody UpdateNamingRequest updateNamingRequest
+  ) {
+    Conversation conversation = conversationService.update(conversationId, updateNamingRequest);
+    SimpleConversationResponse conversationResponse = new SimpleConversationResponse(conversation.getId(), conversation.getName());
+    return ResponseEntity.status(HttpStatus.OK).body(conversationResponse);
+  }
+
+  @PostMapping("/new")
+  public ResponseEntity<SimpleConversationResponse> createConversation(
+          @RequestBody CreateConversationRequest createConversationRequest
+  ) throws SQLIntegrityConstraintViolationException {
+    Conversation conversation =  conversationService.create(createConversationRequest);
+    SimpleConversationResponse conversationResponse = new SimpleConversationResponse(conversation.getId(), conversation.getName());
+    return ResponseEntity.status(HttpStatus.CREATED).body(conversationResponse);
+  }
+
+  @PostMapping("/conversations/{memberId}")
+  public ResponseEntity<Page<SimpleConversationResponse>> getConversations(
+          @PathVariable String memberId,
+          @RequestBody GetConversationsRequest getConversationsRequest
+  ) {
+    Pageable pageable = PageRequest.of(getConversationsRequest.getPageNumber(), getConversationsRequest.getPageSize());
+    Page<SimpleConversationResponse> conversationPage = conversationService.getMemberConversations(memberId, pageable);
+    return ResponseEntity.status(200).body(conversationPage);
+  }
+}
