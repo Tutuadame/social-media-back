@@ -1,0 +1,26 @@
+logging:
+  level:
+    root: INFO
+    org.springframework: DEBUG
+spring:
+  application:
+    name: "auth0Service"
+
+server:
+  port: 8443
+  address: social.media
+  ssl:
+    key-store: classpath:${SSL_KEYSTORE}
+    key-store-password: ${SSL_KEYSTORE_PASSWORD}
+    key-alias: ${SSL_KEY_ALIAS}
+    key-type: PKCS12
+    enabled: true
+
+auth0:
+  issuer: ${AUTH0_ISSUER}
+  domain: ${AUTH0_DOMAIN}
+  connection: ${AUTH0_CONNECTION}
+  audience: ${AUTH0_AUDIENCE}
+  management:
+    clientId: ${AUTH0_MANAGEMENT_CLIENT_ID}
+    clientSecret: ${AUTH0_MANAGEMENT_CLIENT_SECRET}

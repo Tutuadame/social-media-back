@@ -1,5 +1,6 @@
 package project.school.socialmedia.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +18,6 @@ import project.school.socialmedia.service.MessageService;
 @RestController
 @RequestMapping("/messageApi")
 @AllArgsConstructor
-@CrossOrigin(origins = "https://social.media:3000")
 public class MessageController {
 
   private final MessageService messageService;
@@ -33,9 +33,10 @@ public class MessageController {
   }
 
   @PostMapping("/new")
-  public ResponseEntity<SimpleMessageResponse> createMessage(
+  public ResponseEntity<MessageResponse> createMessage(
           @RequestBody CreateMessageRequest createMessageRequest
-  ) {
+  ) throws JsonProcessingException {
+
     return ResponseEntity.status(HttpStatus.CREATED).body(
             messageService.create(createMessageRequest)
     );

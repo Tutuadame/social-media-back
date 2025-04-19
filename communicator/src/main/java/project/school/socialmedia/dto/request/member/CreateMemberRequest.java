@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CreateMemberRequest {
-  private String id;
+  private String memberId;
   private String firstName;
   private String lastName;
 }

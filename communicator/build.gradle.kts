@@ -33,6 +33,8 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	runtimeOnly("com.h2database:h2")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4")
+	implementation("com.auth0:auth0-spring-security-api:1.4.0")
+	implementation("org.springframework.kafka:spring-kafka")
 }
 
 tasks.withType<Test> {

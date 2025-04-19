@@ -1,17 +1,26 @@
 -- Insert members with explicit IDs
-INSERT INTO MEMBER (id, first_name, last_name, picture) VALUES ('6771a216a6339380c80b75a1','Alice','McKenzy', 'https://avatar.iran.liara.run/public');
-INSERT INTO MEMBER (id, first_name, last_name, picture)  VALUES ('66fcffa773b84ab38485cd4a','Bob', 'Douglas', 'https://avatar.iran.liara.run/public');
+INSERT INTO MEMBER (id, first_name, last_name, picture) VALUES ('6771a216a6339380c80b75a1','John','Doe','https://avatar.iran.liara.run/username?username=John+Doe');
+INSERT INTO MEMBER (id, first_name, last_name, picture) VALUES ('66fcffa773b84ab38485cd4a','Jane','Smith','https://avatar.iran.liara.run/username?username=Jane+Smith');
+INSERT INTO MEMBER (id, first_name, last_name, picture) VALUES ('user8','Ethan','Moore','https://avatar.iran.liara.run/username?username=Ethan+Moore');
+INSERT INTO MEMBER (id, first_name, last_name, picture) VALUES ('user9','Sophia','Clark','https://avatar.iran.liara.run/username?username=Sophia+Clark');
+INSERT INTO MEMBER (id, first_name, last_name, picture) VALUES ('user10','Liam','Hall','https://avatar.iran.liara.run/username?username=Liam+Hall');
+INSERT INTO MEMBER (id, first_name, last_name, picture) VALUES ('user3','Alice','Johnson','https://avatar.iran.liara.run/username?username=Alice+Johnson');
+INSERT INTO MEMBER (id, first_name, last_name, picture) VALUES ('user4','Bob','Williams','https://avatar.iran.liara.run/username?username=Bob+Williams');
+INSERT INTO MEMBER (id, first_name, last_name, picture) VALUES ('user5','Charlie','Brown','https://avatar.iran.liara.run/username?username=Charlie+Brown');
+INSERT INTO MEMBER (id, first_name, last_name, picture) VALUES ('user6','David','Taylor','https://avatar.iran.liara.run/username?username=David+Taylor');
+INSERT INTO MEMBER (id, first_name, last_name, picture) VALUES ('user7','Emma','Anderson','https://avatar.iran.liara.run/username?username=Emma+Anderson');
 
 -- Insert conversations with explicit IDs
 INSERT INTO CONVERSATION (id, name) VALUES (1, 'General Chat');
 INSERT INTO CONVERSATION (id, name) VALUES (2, 'Project Updates');
 INSERT INTO CONVERSATION (id, name) VALUES (3, 'Team Coordination');
+ALTER TABLE conversation ALTER COLUMN id RESTART WITH 4;
 
 -- Insert member_conversations with explicit IDs
-INSERT INTO MEMBER_CONVERSATIONS (member_id, conversation_id) VALUES ('6771a216a6339380c80b75a1', 1); -- Alice in General Chat
-INSERT INTO MEMBER_CONVERSATIONS (member_id, conversation_id) VALUES ('66fcffa773b84ab38485cd4a', 1); -- Bob in General Chat
-INSERT INTO MEMBER_CONVERSATIONS (member_id, conversation_id) VALUES ('6771a216a6339380c80b75a1', 2); -- Alice in Project Updates
-INSERT INTO MEMBER_CONVERSATIONS (member_id, conversation_id) VALUES ('66fcffa773b84ab38485cd4a', 3); -- Bob in Team Coordination
+INSERT INTO MEMBER_CONVERSATIONS (member_id, conversation_id) VALUES ('6771a216a6339380c80b75a1', 1);
+INSERT INTO MEMBER_CONVERSATIONS (member_id, conversation_id) VALUES ('66fcffa773b84ab38485cd4a', 1);
+INSERT INTO MEMBER_CONVERSATIONS (member_id, conversation_id) VALUES ('6771a216a6339380c80b75a1', 2);
+INSERT INTO MEMBER_CONVERSATIONS (member_id, conversation_id) VALUES ('66fcffa773b84ab38485cd4a', 3);
 
 -- Insert messages with explicit IDs
 INSERT INTO MESSAGE (conversation_id, member_id, content, sent_at) VALUES (1, '6771a216a6339380c80b75a1', 'Hi!', '2025-02-20 10:00:00'); -- Alice in General Chat

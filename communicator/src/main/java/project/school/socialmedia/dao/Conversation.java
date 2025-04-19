@@ -18,8 +18,7 @@ import java.util.List;
 public class Conversation {
 
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
-  @Column
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
   @Column

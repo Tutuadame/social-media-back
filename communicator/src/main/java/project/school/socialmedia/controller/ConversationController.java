@@ -11,6 +11,7 @@ import project.school.socialmedia.dao.Conversation;
 import project.school.socialmedia.dto.request.conversation.CreateConversationRequest;
 import project.school.socialmedia.dto.request.conversation.GetConversationsRequest;
 import project.school.socialmedia.dto.request.conversation.UpdateNamingRequest;
+import project.school.socialmedia.dto.response.conversation.ConversationResponse;
 import project.school.socialmedia.dto.response.conversation.SimpleConversationResponse;
 import project.school.socialmedia.service.ConversationService;
 
@@ -19,7 +20,6 @@ import java.sql.SQLIntegrityConstraintViolationException;
 @RestController
 @RequestMapping("/conversationApi")
 @AllArgsConstructor
-@CrossOrigin(origins = "https://social.media:3000")
 public class ConversationController {
 
   private final ConversationService conversationService;
@@ -34,7 +34,7 @@ public class ConversationController {
   }
 
   @PatchMapping("/naming/{conversationId}")
-  public ResponseEntity<SimpleConversationResponse> updateConversationName(
+  public ResponseEntity<SimpleConversationResponse> updateConversationName (
           @PathVariable long conversationId,
           @RequestBody UpdateNamingRequest updateNamingRequest
   ) {
@@ -44,7 +44,7 @@ public class ConversationController {
   }
 
   @PostMapping("/new")
-  public ResponseEntity<SimpleConversationResponse> createConversation(
+  public ResponseEntity<SimpleConversationResponse> createConversation (
           @RequestBody CreateConversationRequest createConversationRequest
   ) throws SQLIntegrityConstraintViolationException {
     Conversation conversation =  conversationService.create(createConversationRequest);
@@ -52,13 +52,36 @@ public class ConversationController {
     return ResponseEntity.status(HttpStatus.CREATED).body(conversationResponse);
   }
 
+  @GetMapping("/conversations/{conversationId}")
+  public ResponseEntity<ConversationResponse> getConversation (@PathVariable String conversationId) {
+    ConversationResponse conversation = conversationService.getConversation(conversationId);
+    return ResponseEntity.status(200).body(conversation);
+  }
+
   @PostMapping("/conversations/{memberId}")
-  public ResponseEntity<Page<SimpleConversationResponse>> getConversations(
+  public ResponseEntity<Page<SimpleConversationResponse>> getConversations (
           @PathVariable String memberId,
           @RequestBody GetConversationsRequest getConversationsRequest
   ) {
     Pageable pageable = PageRequest.of(getConversationsRequest.getPageNumber(), getConversationsRequest.getPageSize());
     Page<SimpleConversationResponse> conversationPage = conversationService.getMemberConversations(memberId, pageable);
     return ResponseEntity.status(200).body(conversationPage);
+  }
+
+  //Chat Management Flow
+  @GetMapping("/search")
+  public ResponseEntity<Page<SimpleConversationResponse>> searchForConversations(
+          @RequestParam String name,
+          @RequestParam String requesterId,
+          @RequestParam int pageSize,
+          @RequestParam int pageNumber
+  ) {
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    Page<SimpleConversationResponse> conversationResponse = conversationService.searchByName(
+            name,
+            requesterId,
+            pageable
+    );
+    return ResponseEntity.status(HttpStatus.OK).body(conversationResponse);
   }
 }

@@ -1,5 +1,5 @@
 CREATE TABLE conversation (
-    id BIGINT AS IDENTITY PRIMARY KEY AUTO_INCREMENT,
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL UNIQUE
 );
 
@@ -22,10 +22,11 @@ CREATE TABLE MEMBER_CONVERSATIONS (
     member_id VARCHAR(50) NOT NULL,
     conversation_id BIGINT NOT NULL,
     PRIMARY KEY(member_id, conversation_id),
+    UNIQUE(member_id, conversation_id),
     CONSTRAINT MEMBER_REF_MC FOREIGN KEY(member_id) REFERENCES MEMBER (id),
     CONSTRAINT CONV_REF_MC FOREIGN KEY(conversation_id) REFERENCES CONVERSATION (id)
 );
 
-CREATE INDEX idx_messages_conversation_id ON message(conversation_id);
-CREATE INDEX idx_messages_conversation_sender ON message(conversation_id, member_id);
-CREATE INDEX idx_member_conversation ON MEMBER_CONVERSATIONS (member_id, conversation_id);
+CREATE INDEX idx_messages_conversation_id ON MESSAGE(conversation_id);
+CREATE INDEX idx_messages_conversation_sender ON MESSAGE(conversation_id, member_id);
+CREATE INDEX idx_member_conversation ON MEMBER_CONVERSATIONS(member_id, conversation_id);

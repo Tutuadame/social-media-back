@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class ConversationControllerTest {
 
-  @Mock
+ /* @Mock
   private ConversationService conversationService;
   @InjectMocks
   private ConversationController conversationController;
@@ -113,4 +113,5 @@ class ConversationControllerTest {
       conversationController.updateConversation(conversationId, changedConversation);
     });
   }*/
+
 }

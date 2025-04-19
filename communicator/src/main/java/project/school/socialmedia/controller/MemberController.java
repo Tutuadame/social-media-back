@@ -1,32 +1,29 @@
 package project.school.socialmedia.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.school.socialmedia.dao.Member;
 import project.school.socialmedia.dto.request.member.AddMemberRequest;
 import project.school.socialmedia.dto.request.member.CreateMemberRequest;
-import project.school.socialmedia.dto.request.member.DeleteMemberRequest;
-import project.school.socialmedia.dto.request.member.GetMembersRequest;
+import project.school.socialmedia.dto.request.member.DeleteMemberFromConversationRequest;
+import project.school.socialmedia.dto.response.member.MemberResponse;
 import project.school.socialmedia.service.MemberService;
 
+import java.util.List;
+
 @RestController
-@RequestMapping(value = "/memberApi")
-@CrossOrigin(origins = "https://social.media:3000")
+@RequestMapping("/memberApi")
+@AllArgsConstructor
 public class MemberController {
 
   private final MemberService memberService;
 
-  @Autowired
-  public MemberController(MemberService memberService) {
-    this.memberService = memberService;
-  }
-
   //Registration Flow
-  //This should be string as well, since we don't need the actual the member
   @PostMapping("/new")
   public ResponseEntity<Member> createMember(
           @RequestBody CreateMemberRequest createMemberRequest
@@ -42,15 +39,15 @@ public class MemberController {
           @PathVariable String memberId
   ) {
     String result = memberService.delete(memberId);
-    return ResponseEntity.status(204).body(result);
+    return ResponseEntity.status(HttpStatus.OK).body(result);
   }
 
   //Chat Management Flow
   @PostMapping("/add")
-  public ResponseEntity<Member> addMember(
+  public ResponseEntity<MemberResponse> addMember(
           @RequestBody AddMemberRequest addMemberRequest
   ) {
-    return ResponseEntity.status(201).body(
+    return ResponseEntity.status(HttpStatus.CREATED).body(
             memberService.add(addMemberRequest)
     );
   }
@@ -58,22 +55,37 @@ public class MemberController {
   //Chat Management Flow
   @DeleteMapping("/members")
   public ResponseEntity<String> deleteMemberFromConversation(
-          @RequestBody DeleteMemberRequest deleteMemberRequest
+          @RequestBody DeleteMemberFromConversationRequest deleteMemberFromConversationRequest
   ) {
     String message = memberService.deleteFromConversation(
-            deleteMemberRequest.getMemberId(), deleteMemberRequest.getConversationId()
+            deleteMemberFromConversationRequest.getMemberId(), deleteMemberFromConversationRequest.getConversationId()
     );
-    return ResponseEntity.status(204).body(message);
+    return ResponseEntity.status(HttpStatus.OK).body(message);
   }
 
   //Chat Management Flow
-  @PostMapping("/members/{conversationId}")
-  public ResponseEntity<Page<Member>> getMembers(
-          @PathVariable long conversationId,
-          @RequestBody GetMembersRequest getMembersRequest
+  @GetMapping("/search")
+  public ResponseEntity<Page<MemberResponse>> searchForMembers(
+    @RequestParam String name,
+    @RequestParam String requesterId,
+    @RequestParam int pageSize,
+    @RequestParam int pageNumber
   ) {
-    Pageable pageable = PageRequest.of(getMembersRequest.getPageNumber(), getMembersRequest.getPageSize());
-    Page<Member> memberPage = memberService.getConversationMembers(conversationId, pageable);
-    return ResponseEntity.status(200).body(memberPage);
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    Page<MemberResponse> memberResponsePage = memberService.searchForMembersByName(
+            name,
+            requesterId,
+            pageable
+    );
+    return ResponseEntity.status(HttpStatus.OK).body(memberResponsePage);
+  }
+
+  //Chat Management Flow
+  @PostMapping("/members")
+  public ResponseEntity<List<MemberResponse>> getMembers(
+          @RequestBody List<String> members
+  ) {
+    List<MemberResponse> memberResponses = memberService.getConversationMembers(members);
+    return ResponseEntity.status(HttpStatus.OK).body(memberResponses);
   }
 }

@@ -10,9 +10,6 @@ import lombok.NoArgsConstructor;
 public class MessageResponse {
   private long id;
   private String senderId;
-  private String firstName;
-  private String lastName;
-  private String picture;
   private String content;
   private String sentAt;
 }
