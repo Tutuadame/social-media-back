@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import project.school.socialmedia.dao.Conversation;
+import project.school.socialmedia.domain.Conversation;
 
 import java.util.Optional;
 

@@ -1,19 +1,13 @@
 package project.school.socialmedia.listener;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import project.school.socialmedia.NotificationHandlerApplication;
-import project.school.socialmedia.dao.Notification;
+import project.school.socialmedia.domain.Notification;
 import project.school.socialmedia.service.NotificationService;
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 @AllArgsConstructor

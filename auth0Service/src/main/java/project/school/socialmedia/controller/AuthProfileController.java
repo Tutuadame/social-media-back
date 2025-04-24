@@ -19,14 +19,14 @@ import project.school.socialmedia.service.impl.TokenServiceImpl;
 @CrossOrigin(origins = "https://social.media:3000")
 public class AuthProfileController {
 
-  private final ProfileService profileServiceImpl;
-  private final TokenService tokenServiceImpl;
+  private final ProfileService profileService;
+  private final TokenService tokenService;
   private String clientToken = "";
 
   @Autowired
-  public AuthProfileController(ProfileServiceImpl profileServiceImpl, TokenServiceImpl tokenServiceImpl) {
-    this.profileServiceImpl = profileServiceImpl;
-    this.tokenServiceImpl = tokenServiceImpl;
+  public AuthProfileController(ProfileServiceImpl profileService, TokenServiceImpl tokenService) {
+    this.profileService = profileService;
+    this.tokenService = tokenService;
   }
 
   @PatchMapping("/profile-update/{id}")
@@ -35,28 +35,28 @@ public class AuthProfileController {
           @PathVariable String id
   ) throws JsonProcessingException {
     setToken();
-    String responseBody = profileServiceImpl.updateUser(updateProfileRequest, id, clientToken);
+    String responseBody = profileService.updateUser(updateProfileRequest, id, clientToken);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 
   @GetMapping("/profile/{id}")
   public ResponseEntity<UserResponse> getProfile(@PathVariable String id) throws JsonProcessingException {
     setToken();
-    UserResponse userResponse = profileServiceImpl.getUser(id, clientToken);
+    UserResponse userResponse = profileService.getUser(id, clientToken);
     return ResponseEntity.ok(userResponse);
   }
 
   @DeleteMapping("/delete-profile/{id}")
   public ResponseEntity<String> deleteProfile(@PathVariable String id) {
     setToken();
-    String responseBody = profileServiceImpl.deleteUser(id, clientToken);
+    String responseBody = profileService.deleteUser(id, clientToken);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
   }
 
   private void setToken() throws ResponseStatusException {
     try {
-      if (tokenServiceImpl.isTokenSet(clientToken) || tokenServiceImpl.isTokenExpired(clientToken)) {
-        clientToken = tokenServiceImpl.getManagementToken();
+      if (tokenService.isTokenSet(clientToken) || tokenService.isTokenExpired(clientToken)) {
+        clientToken = tokenService.getManagementToken();
       }
     } catch (TokenServiceException e) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unable to retrieve management token", e);

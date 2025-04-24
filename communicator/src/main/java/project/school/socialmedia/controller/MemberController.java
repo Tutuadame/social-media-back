@@ -7,12 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.school.socialmedia.dao.Member;
+import project.school.socialmedia.domain.Member;
 import project.school.socialmedia.dto.request.member.AddMemberRequest;
 import project.school.socialmedia.dto.request.member.CreateMemberRequest;
 import project.school.socialmedia.dto.request.member.DeleteMemberFromConversationRequest;
 import project.school.socialmedia.dto.response.member.MemberResponse;
-import project.school.socialmedia.service.MemberService;
+import project.school.socialmedia.service.impl.MemberServiceImpl;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MemberController {
 
-  private final MemberService memberService;
+  private final MemberServiceImpl memberServiceImpl;
 
   //Registration Flow
   @PostMapping("/new")
@@ -29,7 +29,7 @@ public class MemberController {
           @RequestBody CreateMemberRequest createMemberRequest
   ) {
     return ResponseEntity.status(201).body(
-            memberService.create(createMemberRequest)
+            memberServiceImpl.create(createMemberRequest)
     );
   }
 
@@ -38,7 +38,7 @@ public class MemberController {
   public ResponseEntity<String> deleteMember(
           @PathVariable String memberId
   ) {
-    String result = memberService.delete(memberId);
+    String result = memberServiceImpl.delete(memberId);
     return ResponseEntity.status(HttpStatus.OK).body(result);
   }
 
@@ -48,7 +48,7 @@ public class MemberController {
           @RequestBody AddMemberRequest addMemberRequest
   ) {
     return ResponseEntity.status(HttpStatus.CREATED).body(
-            memberService.add(addMemberRequest)
+            memberServiceImpl.add(addMemberRequest)
     );
   }
 
@@ -57,7 +57,7 @@ public class MemberController {
   public ResponseEntity<String> deleteMemberFromConversation(
           @RequestBody DeleteMemberFromConversationRequest deleteMemberFromConversationRequest
   ) {
-    String message = memberService.deleteFromConversation(
+    String message = memberServiceImpl.deleteFromConversation(
             deleteMemberFromConversationRequest.getMemberId(), deleteMemberFromConversationRequest.getConversationId()
     );
     return ResponseEntity.status(HttpStatus.OK).body(message);
@@ -72,7 +72,7 @@ public class MemberController {
     @RequestParam int pageNumber
   ) {
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
-    Page<MemberResponse> memberResponsePage = memberService.searchForMembersByName(
+    Page<MemberResponse> memberResponsePage = memberServiceImpl.searchForMembersByName(
             name,
             requesterId,
             pageable
@@ -85,7 +85,7 @@ public class MemberController {
   public ResponseEntity<List<MemberResponse>> getMembers(
           @RequestBody List<String> members
   ) {
-    List<MemberResponse> memberResponses = memberService.getConversationMembers(members);
+    List<MemberResponse> memberResponses = memberServiceImpl.getConversationMembers(members);
     return ResponseEntity.status(HttpStatus.OK).body(memberResponses);
   }
 }

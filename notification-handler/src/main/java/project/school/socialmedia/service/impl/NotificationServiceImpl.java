@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import project.school.socialmedia.dao.Notification;
+import project.school.socialmedia.domain.Notification;
 import project.school.socialmedia.dto.NotificationResponse;
 import project.school.socialmedia.repository.NotificationRepository;
 import project.school.socialmedia.service.NotificationService;

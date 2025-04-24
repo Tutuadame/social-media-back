@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import project.school.socialmedia.dao.Connection;
-import project.school.socialmedia.dao.ConnectionStatusEnum;
-import project.school.socialmedia.dao.Post;
-import project.school.socialmedia.dao.Profile;
+import project.school.socialmedia.domain.Connection;
+import project.school.socialmedia.domain.ConnectionStatusEnum;
+import project.school.socialmedia.domain.Post;
+import project.school.socialmedia.domain.Profile;
 import project.school.socialmedia.dto.response.post.PostResponse;
 import project.school.socialmedia.repository.ConnectionRepository;
 import project.school.socialmedia.repository.PostRepository;
@@ -17,7 +17,6 @@ import project.school.socialmedia.service.PostService;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor

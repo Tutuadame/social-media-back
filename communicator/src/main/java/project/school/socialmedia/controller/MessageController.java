@@ -13,14 +13,14 @@ import project.school.socialmedia.dto.request.message.GetMessagesRequest;
 import project.school.socialmedia.dto.request.message.UpdateMessageRequest;
 import project.school.socialmedia.dto.response.message.MessageResponse;
 import project.school.socialmedia.dto.response.message.SimpleMessageResponse;
-import project.school.socialmedia.service.MessageService;
+import project.school.socialmedia.service.impl.MessageServiceImpl;
 
 @RestController
 @RequestMapping("/messageApi")
 @AllArgsConstructor
 public class MessageController {
 
-  private final MessageService messageService;
+  private final MessageServiceImpl messageServiceImpl;
 
   @PatchMapping("/{messageId}")
   public ResponseEntity<SimpleMessageResponse> updateMessage(
@@ -28,7 +28,7 @@ public class MessageController {
           @RequestBody UpdateMessageRequest updateMessageRequest
   ) {
     return ResponseEntity.status(HttpStatus.OK).body(
-            messageService.update(messageId, updateMessageRequest)
+            messageServiceImpl.update(messageId, updateMessageRequest)
     );
   }
 
@@ -38,7 +38,7 @@ public class MessageController {
   ) throws JsonProcessingException {
 
     return ResponseEntity.status(HttpStatus.CREATED).body(
-            messageService.create(createMessageRequest)
+            messageServiceImpl.create(createMessageRequest)
     );
   }
 
@@ -47,7 +47,7 @@ public class MessageController {
           @PathVariable long messageId
   ) {
     return ResponseEntity.status(HttpStatus.NO_CONTENT).body(
-            messageService.delete(messageId)
+            messageServiceImpl.delete(messageId)
     );
   }
 
@@ -57,7 +57,7 @@ public class MessageController {
           @RequestBody GetMessagesRequest getMessagesRequest
   ) {
     Pageable pageable = PageRequest.of(getMessagesRequest.getPageNumber(), getMessagesRequest.getPageSize());
-    Page<MessageResponse> messageResponsePage = messageService.get(conversationId, pageable);
+    Page<MessageResponse> messageResponsePage = messageServiceImpl.get(conversationId, pageable);
     return ResponseEntity.status(200).body(messageResponsePage);
   }
 }

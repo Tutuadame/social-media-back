@@ -1,33 +1,9 @@
 package project.school.socialmedia.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import project.school.socialmedia.dao.Message;
-import project.school.socialmedia.dto.request.message.CreateMessageRequest;
-import project.school.socialmedia.dto.request.message.UpdateMessageRequest;
-import project.school.socialmedia.dto.response.message.MessageResponse;
-import project.school.socialmedia.service.MessageService;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.util.AssertionErrors.assertEquals;
 
 @SpringBootTest
 class MessageControllerTest {

@@ -36,8 +36,6 @@ dependencies {
 	implementation("org.apache.httpcomponents.client5:httpclient5:5.4.3")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 	implementation("com.auth0:java-jwt:4.4.0")
-
-
 }
 
 tasks.withType<Test> {

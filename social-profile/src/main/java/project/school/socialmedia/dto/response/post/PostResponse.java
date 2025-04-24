@@ -3,7 +3,7 @@ package project.school.socialmedia.dto.response.post;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import project.school.socialmedia.dao.Post;
+import project.school.socialmedia.domain.Post;
 
 import java.time.LocalDateTime;
 
