@@ -7,12 +7,14 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import project.school.socialmedia.config.KafkaConfigProps;
 import project.school.socialmedia.domain.Post;
+import project.school.socialmedia.domain.Profile;
 import project.school.socialmedia.domain.Vote;
 import project.school.socialmedia.dto.kafka.Notification;
 import project.school.socialmedia.dto.request.vote.CreateVoteRequest;
 import project.school.socialmedia.dto.response.post.PostResponse;
 import project.school.socialmedia.dto.response.vote.CheckVoteResponse;
 import project.school.socialmedia.repository.PostRepository;
+import project.school.socialmedia.repository.ProfileRepository;
 import project.school.socialmedia.repository.VoteRepository;
 import project.school.socialmedia.service.VoteService;
 
@@ -28,6 +30,8 @@ public class VoteServiceImpl implements VoteService {
 
   private final PostRepository postRepository;
 
+  private final ProfileRepository profileRepository;
+
   private final KafkaTemplate<String, String> kafkaTemplate;
 
   private final KafkaConfigProps kafkaConfigProps;
@@ -36,8 +40,13 @@ public class VoteServiceImpl implements VoteService {
 
   @Override
   public PostResponse addVote(CreateVoteRequest request) {
-    Vote vote = voteRepository
-            .findByPostIdAndProfileId(request.getPostId(), request.getProfileId())
+    Profile profile = profileRepository.findById(request.getProfileId())
+            .orElseThrow(() -> new NoSuchElementException("Profile not found"));
+
+    Post post = postRepository.findById(request.getPostId())
+            .orElseThrow(() -> new NoSuchElementException("Post not found"));
+
+    Vote vote = voteRepository.findByPostIdAndProfileId(request.getPostId(), request.getProfileId())
             .orElse(null);
 
     if (vote != null) {
@@ -48,18 +57,14 @@ public class VoteServiceImpl implements VoteService {
         voteRepository.save(vote);
       }
     } else {
-      vote = new Vote(request.isVote(), request.getPostId(), request.getProfileId());
+      vote = new Vote(request.isVote(), post, profile);
       voteRepository.save(vote);
 
       checkAndSendNotification(vote);
     }
 
-    Post post = postRepository
-            .findById(request.getPostId())
-            .orElseThrow(() -> new NoSuchElementException("Post not found"));
-
-    int likes = voteRepository.countVotesByPostIdAndVote(post.getId(), true);
-    int dislikes = voteRepository.countVotesByPostIdAndVote(post.getId(), false);
+    int likes = voteRepository.countByPostIdAndVote(post.getId(), true);
+    int dislikes = voteRepository.countByPostIdAndVote(post.getId(), false);
 
     return new PostResponse(post, likes, dislikes);
   }
@@ -92,7 +97,7 @@ public class VoteServiceImpl implements VoteService {
   private void checkAndSendNotification(Vote vote) {
     try {
       Post post = postRepository
-              .findById(vote.getPostId())
+              .findById(vote.getPost().getId())
               .orElseThrow(() -> new NoSuchElementException("Post not found"));
 
         Notification notification = createNotification(post, vote, LocalDateTime.now());

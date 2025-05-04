@@ -12,18 +12,16 @@ import java.util.List;
 
 @Repository
 public interface MemberConversationsRepository extends JpaRepository<MemberConversations, Long> {
-  Page<MemberConversations> findByMemberId(String memberId, Pageable pageable);
+  Page<MemberConversations> findByMember_Id(String memberId, Pageable pageable);
 
-  List<MemberConversations> findByConversationId(Long conversationId);
+  List<MemberConversations> findByConversation_Id(Long conversationId);
 
   @Query("SELECT EXISTS (SELECT 1 FROM MemberConversations mc WHERE mc.conversation.id = :conversationId AND mc.member.id = :memberId)")
   boolean isMemberOfConversation(@Param("conversationId") Long conversationId, @Param("memberId") String memberId);
 
-  void deleteByMemberId(String id);
+  void deleteByMember_Id(String id);
 
-  void deleteByMemberIdAndConversationId(String memberId, Long conversationId);
-
-
+  void deleteByMember_IdAndConversation_Id(String memberId, Long conversationId);
 }
 
 

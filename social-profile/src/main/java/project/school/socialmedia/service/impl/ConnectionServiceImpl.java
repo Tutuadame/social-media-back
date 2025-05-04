@@ -45,7 +45,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     connection = connectionRepository.save(connection);
 
     try {
-      Notification notification = createNotification(initiator, target,LocalDateTime.now());
+      Notification notification = createNotification(initiator, target, LocalDateTime.now());
       sendNotificationWithKafka(notification);
     } catch (JsonProcessingException | NoSuchElementException e) {
       System.out.println(e.getMessage());

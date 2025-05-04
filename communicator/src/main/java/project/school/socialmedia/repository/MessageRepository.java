@@ -8,5 +8,5 @@ import project.school.socialmedia.domain.Message;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
-  Page<Message> findByConversationIdOrderBySentAtDesc(Long conversationId, Pageable pageable);
+  Page<Message> findByConversation_IdOrderBySentAtDesc(Long conversationId, Pageable pageable);
 }

@@ -34,8 +34,18 @@ public class Profile {
   @Column
   private String introduction;
 
-  @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Post> posts;
+
+  // Add these to handle incoming connections
+  @OneToMany(mappedBy = "initiator", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Connection> initiatedConnections;
+
+  @OneToMany(mappedBy = "target", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Connection> targetedConnections;
+
+  @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Vote> votes;
 
   public Profile(String profileId, String picture, GenderEnum gender, String firstName, String lastName, String introduction) {
     this.id = profileId;

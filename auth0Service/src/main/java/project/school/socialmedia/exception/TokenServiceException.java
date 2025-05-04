@@ -1,4 +1,4 @@
-package project.school.socialmedia.service;
+package project.school.socialmedia.exception;
 
 public class TokenServiceException extends RuntimeException {
   public TokenServiceException(String message) {

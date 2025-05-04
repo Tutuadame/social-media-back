@@ -69,13 +69,20 @@ public class MemberController {
     @RequestParam String name,
     @RequestParam String requesterId,
     @RequestParam int pageSize,
-    @RequestParam int pageNumber
+    @RequestParam int pageNumber,
+    @RequestHeader(value = "Authorization", required = false) String authorizationHeader
   ) {
+    String accessToken = null;
+    if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+      accessToken = authorizationHeader.substring(7);
+    }
+
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     Page<MemberResponse> memberResponsePage = memberServiceImpl.searchForMembersByName(
             name,
             requesterId,
-            pageable
+            pageable,
+            accessToken
     );
     return ResponseEntity.status(HttpStatus.OK).body(memberResponsePage);
   }
@@ -83,9 +90,9 @@ public class MemberController {
   //Chat Management Flow
   @PostMapping("/members")
   public ResponseEntity<List<MemberResponse>> getMembers(
-          @RequestBody List<String> members
+          @RequestBody List<String> memberIds
   ) {
-    List<MemberResponse> memberResponses = memberServiceImpl.getConversationMembers(members);
+    List<MemberResponse> memberResponses = memberServiceImpl.getConversationMembers(memberIds);
     return ResponseEntity.status(HttpStatus.OK).body(memberResponses);
   }
 }

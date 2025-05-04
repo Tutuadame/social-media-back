@@ -28,5 +28,5 @@ public interface MemberService {
   List<MemberResponse> getConversationMembers(List<String> members);
 
   @Transactional(readOnly = true)
-  Page<MemberResponse> searchForMembersByName(String name, String requesterId, Pageable pageable);
+  Page<MemberResponse> searchForMembersByName(String name, String requesterId, Pageable pageable, String accessToken);
 }

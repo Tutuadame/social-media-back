@@ -1,0 +1,124 @@
+@startuml
+
+package "controller" {
+  class AuthProfileController {
+    - ProfileService profileService
+    - TokenService tokenService
+    - String clientToken
+    + AuthProfileController(ProfileServiceImpl, TokenServiceImpl)
+    + ResponseEntity<String> updateProfile(UpdateProfileRequest, String)
+    + ResponseEntity<UserResponse> getProfile(String)
+    + ResponseEntity<String> deleteProfile(String)
+    - void setToken()
+  }
+}
+
+package "dto.request" {
+  class UpdateProfileRequest {
+    - String key
+    - String value
+  }
+}
+
+package "dto.response" {
+  class MessageResponse {
+    - String content
+  }
+
+  class TokenResponse {
+    - String accessToken
+    - String scope
+    - String tokenType
+    - int expiresIn
+  }
+
+  class UserResponse {
+    - String userId
+    - String email
+    - boolean emailVerified
+    - String name
+    - String nickname
+    - String picture
+    - String updatedAt
+    - String lastIp
+    - String lastLogin
+    - int loginsCount
+    - List<Map<String, Object>> identities
+  }
+}
+
+package "service" {
+  interface ProfileService {
+    + String updateUser(UpdateProfileRequest, String, String)
+    + UserResponse getUser(String, String)
+    + String deleteUser(String, String)
+  }
+
+  enum RequestMethod {
+    GET
+    POST
+    PATCH
+    DELETE
+    + String toString()
+  }
+
+  interface TokenService {
+    + String getManagementToken()
+    + boolean isTokenExpired(String)
+    + boolean isTokenSet(String)
+  }
+}
+
+package "service.impl" {
+  class TokenServiceImpl {
+    - String domain
+    - String clientId
+    - String clientSecret
+    - String audience
+    + TokenServiceImpl(RequestUtils, ServiceUtils)
+    + String getManagementToken()
+    + boolean isTokenExpired(String)
+    + boolean isTokenSet(String)
+  }
+
+  class ProfileServiceImpl {
+    - {static} String SEPARATOR
+    - {static} String CONNECTION
+    - String domain
+    - String clientId
+    - String clientSecret
+    - String audience
+    + ProfileServiceImpl(RequestUtils, ServiceUtils)
+    + String updateUser(UpdateProfileRequest, String, String)
+    + UserResponse getUser(String, String)
+    + String deleteUser(String, String)
+    - String generateAccessURL(String)
+    - String getErrorMessage(Exception)
+  }
+}
+
+package "exception" {
+  class TokenServiceException {
+  }
+}
+
+' Interfaces implementations
+TokenServiceImpl ..|> TokenService
+ProfileServiceImpl ..|> ProfileService
+
+' Usage relationships
+AuthProfileController --> ProfileService
+AuthProfileController --> TokenService
+AuthProfileController ..> UpdateProfileRequest
+AuthProfileController ..> UserResponse
+AuthProfileController ..> TokenServiceException
+
+ProfileServiceImpl ..> UpdateProfileRequest
+ProfileServiceImpl ..> UserResponse
+ProfileServiceImpl ..> RequestMethod
+
+TokenServiceImpl ..> RequestMethod
+TokenServiceImpl ..> TokenResponse
+TokenServiceImpl ..> TokenServiceException
+
+@enduml

@@ -1,0 +1,89 @@
+@startuml
+
+' DOMAIN ENTITY
+package "domain" {
+  class Notification {
+    - id: Long
+    - userIds: List<String>
+    - message: String
+    - createdAt: LocalDateTime
+    + builder()
+  }
+}
+
+' DTO
+package "dto" {
+  class NotificationResponse {
+    - message: String
+    - createdAt: String
+    + NotificationResponse(message: String, createdAt: String)
+  }
+}
+
+' REPOSITORY
+package "repository" {
+  interface NotificationRepository {
+    + findByUserId(pageable: Pageable, userId: String): Page<Notification>
+  }
+}
+
+' SERVICE
+package "service" {
+  interface NotificationService {
+    + save(notification: Notification): Notification
+    + listNotifications(pageable: Pageable, userId: String): Page<NotificationResponse>
+  }
+}
+
+' SERVICE IMPLEMENTATION
+package "service.impl" {
+  class NotificationServiceImpl {
+    - notificationRepository: NotificationRepository
+    + save(notification: Notification): Notification
+    + listNotifications(pageable: Pageable, userId: String): Page<NotificationResponse>
+  }
+}
+
+' CONTROLLER
+package "controller" {
+  class NotificationController {
+    - notificationService: NotificationService
+    + listNotifications(pageSize: int, pageNumber: int, userId: String): ResponseEntity<Page<NotificationResponse>>
+  }
+}
+
+' KAFKA LISTENER
+package "listener" {
+  class NotificationListener {
+    - notificationService: NotificationService
+    - objectMapper: ObjectMapper
+    + listen(input: String): void
+  }
+}
+
+' RELATIONSHIPS
+
+' Service implementation
+NotificationServiceImpl ..|> NotificationService
+
+' Repository relationship
+NotificationRepository ..> Notification : manages >
+
+' Service uses repository
+NotificationServiceImpl --> NotificationRepository
+
+' Controller uses service
+NotificationController --> NotificationService
+
+' Listener uses service
+NotificationListener --> NotificationService
+
+' Listener flow
+NotificationListener ..> Notification : deserializes JSON to >
+NotificationListener --> NotificationService : saves using >
+
+' Data transformation
+NotificationService ..> NotificationResponse : transforms to >
+Notification ..> NotificationResponse : maps to >
+
+@enduml

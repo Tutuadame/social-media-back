@@ -1,0 +1,379 @@
+@startuml
+
+' DOMAIN ENTITIES
+package "domain" {
+  class Profile {
+    - id: String
+    - picture: String
+    - gender: GenderEnum
+    - firstName: String
+    - lastName: String
+    - introduction: String
+    - posts: List<Post>
+    + Profile(profileId: String, picture: String, gender: GenderEnum, firstName: String, lastName: String, introduction: String)
+  }
+
+  class Post {
+    - id: Long
+    - content: String
+    - createdAt: LocalDateTime
+    - profile: Profile
+    + Post(content: String, profile: Profile)
+  }
+
+  class Connection {
+    - id: Long
+    - initiator: Profile
+    - target: Profile
+    - status: ConnectionStatusEnum
+    + Connection(initiator: Profile, target: Profile, status: ConnectionStatusEnum)
+  }
+
+  class Vote {
+    - id: Long
+    - vote: boolean
+    - postId: long
+    - profileId: String
+    + Vote(vote: boolean, postId: long, profileId: String)
+  }
+
+  enum ConnectionStatusEnum {
+    PENDING
+    ACCEPTED
+    BLOCKED
+    + toString(): String
+  }
+
+  enum GenderEnum {
+    MALE
+    FEMALE
+    OTHER
+    - displayName: String
+    + toString(): String
+    + getDisplayName(): String
+  }
+}
+
+' REPOSITORIES
+package "repository" {
+  interface ProfileRepository {
+    + searchByName(name: String, pageable: Pageable): Page<Profile>
+  }
+
+  interface PostRepository {
+    + findPostsByConnections(targetIds: List<String>, pageable: Pageable): Page<Post>
+    + findPostByProfileId(profileId: String, pageable: Pageable): Page<Post>
+  }
+
+  interface ConnectionRepository {
+    + findAcceptedByProfileId(profileId: String): List<Connection>
+    + findPendingByTargetId(targetId: String, pageable: Pageable): Page<Connection>
+    + findByUserIdAndStatus(userId: String, status: ConnectionStatusEnum): List<Connection>
+    + findConnectedIds(requesterId: String, targetIds: List<String>): List<String>
+    + getConnectionStatus(currentUserId: String, targetUserId: String): Optional<Connection>
+  }
+
+  interface VoteRepository {
+    + countVotesByPostIdAndVote(postId: Long, vote: boolean): int
+    + existsByPostIdAndProfileId(postId: Long, profileId: String): boolean
+    + findByPostIdAndProfileId(postId: Long, profileId: String): Optional<Vote>
+  }
+}
+
+' SERVICES
+package "service" {
+  interface ProfileService {
+    + createProfile(createProfileRequest: CreateProfileRequest): ProfileResponse
+    + updateIntroduction(profileId: String, introduction: String): UpdateIntroductionResponse
+    + deleteProfile(profileId: String): void
+    + getUserProfile(profileId: String): ProfileResponse
+    + searchByName(name: String, pageable: Pageable): Page<GenericProfileResponse>
+  }
+
+  interface PostService {
+    + createPost(profileId: String, content: String): PostResponse
+    + deletePost(postId: long): void
+    + getPostsFromConnections(pageable: Pageable, profileId: String): Page<PostResponse>
+    + getPostsFromUser(pageable: Pageable, profileId: String): Page<PostResponse>
+  }
+
+  interface ConnectionService {
+    + createConnection(createConnectionRequest: CreateConnectionRequest): ConnectionResponse
+    + updateConnectionStatus(updateConnectionsStatusRequest: UpdateConnectionsStatusRequest): UpdateConnectionStatusResponse
+    + getAcceptedConnections(profileId: String): List<ConnectionResponse>
+    + findConnectedIds(userId1: String, targetIds: List<String>): List<String>
+    + getPendingConnections(profileId: String, pageable: Pageable): Page<ConnectionResponse>
+    + checkConnection(currentUserId: String, targetUserId: String): String
+  }
+
+  interface VoteService {
+    + addVote(createVoteRequest: CreateVoteRequest): PostResponse
+    + checkVote(profileId: String, postId: String): CheckVoteResponse
+  }
+}
+
+' SERVICE IMPLEMENTATIONS
+package "service.impl" {
+  class ProfileServiceImpl {
+    - profileRepository: ProfileRepository
+    + createProfile(createProfileRequest: CreateProfileRequest): ProfileResponse
+    + updateIntroduction(profileId: String, introduction: String): UpdateIntroductionResponse
+    + deleteProfile(profileId: String): void
+    + getUserProfile(profileId: String): ProfileResponse
+    + searchByName(name: String, pageable: Pageable): Page<GenericProfileResponse>
+    - getProfile(createProfileRequest: CreateProfileRequest): Profile
+    - checkGender(gender: String): GenderEnum
+  }
+
+  class PostServiceImpl {
+    - postRepository: PostRepository
+    - profileRepository: ProfileRepository
+    - voteRepository: VoteRepository
+    - connectionRepository: ConnectionRepository
+    + createPost(profileId: String, content: String): PostResponse
+    + deletePost(postId: long): void
+    + getPostsFromConnections(pageable: Pageable, profileId: String): Page<PostResponse>
+    + getPostsFromUser(pageable: Pageable, profileId: String): Page<PostResponse>
+  }
+
+  class ConnectionServiceImpl {
+    - connectionRepository: ConnectionRepository
+    - profileRepository: ProfileRepository
+    - kafkaTemplate: KafkaTemplate<String, String>
+    - kafkaConfigProps: KafkaConfigProps
+    - objectMapper: ObjectMapper
+    + createConnection(createConnectionRequest: CreateConnectionRequest): ConnectionResponse
+    + updateConnectionStatus(updateConnectionsStatusRequest: UpdateConnectionsStatusRequest): UpdateConnectionStatusResponse
+    + getAcceptedConnections(profileId: String): List<ConnectionResponse>
+    + findConnectedIds(userId1: String, targetIds: List<String>): List<String>
+    + getPendingConnections(profileId: String, pageable: Pageable): Page<ConnectionResponse>
+    + checkConnection(currentUserId: String, targetUserId: String): String
+    - checkConnectionStatus(updateConnectionsStatusRequest: UpdateConnectionsStatusRequest): ConnectionStatusEnum
+    - createNotification(initiator: Profile, target: Profile, sentAt: LocalDateTime): Notification
+    - sendNotificationWithKafka(notification: Notification): void
+  }
+
+  class VoteServiceImpl {
+    - voteRepository: VoteRepository
+    - postRepository: PostRepository
+    - kafkaTemplate: KafkaTemplate<String, String>
+    - kafkaConfigProps: KafkaConfigProps
+    - objectMapper: ObjectMapper
+    + addVote(createVoteRequest: CreateVoteRequest): PostResponse
+    + checkVote(profileId: String, postId: String): CheckVoteResponse
+    - createNotification(post: Post, vote: Vote, sentAt: LocalDateTime): Notification
+    - sendNotificationWithKafka(notification: Notification): void
+    - checkAndSendNotification(vote: Vote): void
+  }
+}
+
+' CONTROLLERS
+package "controller" {
+  class ProfileController {
+    - profileService: ProfileService
+    + createProfile(createProfileRequest: CreateProfileRequest): ResponseEntity<ProfileResponse>
+    + deleteProfile(profileId: String): ResponseEntity<String>
+    + getProfile(profileId: String): ResponseEntity<ProfileResponse>
+    + updateIntroduction(profileId: String, updateIntroductionRequest: UpdateIntroductionRequest): ResponseEntity<UpdateIntroductionResponse>
+    + searchProfileByName(name: String, pageNumber: int, pageSize: int): ResponseEntity<Page<GenericProfileResponse>>
+  }
+
+  class PostController {
+    - postService: PostService
+    + getProfilePosts(profileId: String, getPageablePostsRequest: GetPageablePostsRequest): ResponseEntity<Page<PostResponse>>
+    + getConnectionPosts(profileId: String, getPageablePostsRequest: GetPageablePostsRequest): ResponseEntity<Page<PostResponse>>
+    + createPost(createPostRequest: CreatePostRequest): ResponseEntity<PostResponse>
+    + deletePost(postId: Long): ResponseEntity<String>
+  }
+
+  class ConnectionsController {
+    - connectionService: ConnectionService
+    + getAcceptedConnectionsByUser(profileId: String): ResponseEntity<List<ConnectionResponse>>
+    + getPendingConnectionsByUser(profileId: String, getPageablePendingConnectionsRequest: GetPageablePendingConnectionsRequest): ResponseEntity<Page<ConnectionResponse>>
+    + updateConnection(updateConnectionsStatusRequest: UpdateConnectionsStatusRequest): ResponseEntity<UpdateConnectionStatusResponse>
+    + createConnection(createConnectionRequest: CreateConnectionRequest): ResponseEntity<ConnectionResponse>
+    + checkConnectionsBatch(request: CheckConnectionsBatchRequest): ResponseEntity<CheckConnectionsBatchResponse>
+    + checkConnectionStatus(currentUserId: String, targetUserId: String): ResponseEntity<String>
+  }
+
+  class VoteController {
+    - voteService: VoteService
+    + addVoteToPost(createVoteRequest: CreateVoteRequest): ResponseEntity<PostResponse>
+    + checkVote(profileId: String, postId: String): ResponseEntity<CheckVoteResponse>
+  }
+}
+
+' KEY DTOs (simplified for clarity)
+package "dto" {
+  package "request" {
+    package "profile" {
+      class CreateProfileRequest {
+        - profileId: String
+        - gender: String
+        - firstName: String
+        - lastName: String
+      }
+
+      class UpdateIntroductionRequest {
+        - introduction: String
+      }
+    }
+
+    package "post" {
+      class CreatePostRequest {
+        - profileId: String
+        - content: String
+      }
+
+      class GetPageablePostsRequest {
+        - pageNumber: int
+        - pageSize: int
+      }
+    }
+
+    package "connections" {
+      class CreateConnectionRequest {
+        - initiatorId: String
+        - targetId: String
+      }
+
+      class UpdateConnectionsStatusRequest {
+        - id: long
+        - status: String
+      }
+
+      class GetPageablePendingConnectionsRequest {
+        - pageSize: int
+        - pageNumber: int
+      }
+
+      class CheckConnectionsBatchRequest {
+        - requesterId: String
+        - targetIds: List<String>
+      }
+    }
+
+    package "vote" {
+      class CreateVoteRequest {
+        - profileId: String
+        - postId: long
+        - vote: boolean
+      }
+    }
+  }
+
+  package "response" {
+    package "profile" {
+      class ProfileResponse {
+        - id: String
+        - introduction: String
+        - gender: String
+        - firstName: String
+        - lastName: String
+        - picture: String
+      }
+
+      class GenericProfileResponse {
+        - id: String
+        - firstName: String
+        - lastName: String
+        - picture: String
+      }
+
+      class UpdateIntroductionResponse {
+        - profileId: String
+        - introduction: String
+      }
+    }
+
+    package "post" {
+      class PostResponse {
+        - id: Long
+        - profileId: String
+        - content: String
+        - createdAt: LocalDateTime
+        - likes: int
+        - dislikes: int
+      }
+    }
+
+    package "connection" {
+      class ConnectionResponse {
+        - id: long
+        - profileId: String
+        - firstName: String
+        - lastName: String
+        - picture: String
+      }
+
+      class UpdateConnectionStatusResponse {
+        - id: long
+      }
+
+      class CheckConnectionsBatchResponse {
+        - connectedIds: List<String>
+      }
+    }
+
+    package "vote" {
+      class CheckVoteResponse {
+        - type: String
+      }
+    }
+  }
+
+  package "kafka" {
+    class Notification {
+      - userIds: List<String>
+      - message: String
+      - createdAt: LocalDateTime
+    }
+  }
+}
+
+' RELATIONSHIPS
+
+' Domain relationships
+Profile "1" -- "many" Post : has >
+Profile "1" -- "many" Connection : initiates >
+Profile "1" -- "many" Connection : receives >
+Post -- Vote : has >
+
+' Enum relationships
+Profile -- GenderEnum : has >
+Connection -- ConnectionStatusEnum : has >
+
+' Repository relationships
+ProfileRepository ..> Profile : manages >
+PostRepository ..> Post : manages >
+ConnectionRepository ..> Connection : manages >
+VoteRepository ..> Vote : manages >
+
+' Service implementations
+ProfileServiceImpl ..|> ProfileService
+PostServiceImpl ..|> PostService
+ConnectionServiceImpl ..|> ConnectionService
+VoteServiceImpl ..|> VoteService
+
+' Services use repositories
+ProfileServiceImpl --> ProfileRepository
+PostServiceImpl --> PostRepository
+PostServiceImpl --> ProfileRepository
+PostServiceImpl --> VoteRepository
+PostServiceImpl --> ConnectionRepository
+ConnectionServiceImpl --> ConnectionRepository
+ConnectionServiceImpl --> ProfileRepository
+VoteServiceImpl --> VoteRepository
+VoteServiceImpl --> PostRepository
+
+' Controllers use services
+ProfileController --> ProfileService
+PostController --> PostService
+ConnectionsController --> ConnectionService
+VoteController --> VoteService
+
+' Notification flow
+ConnectionServiceImpl ..> Notification : creates for connections >
+VoteServiceImpl ..> Notification : creates for votes >
+
+@enduml

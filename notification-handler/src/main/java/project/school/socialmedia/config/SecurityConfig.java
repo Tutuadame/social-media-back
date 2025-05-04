@@ -21,6 +21,7 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http    .cors(Customizer.withDefaults())
             .authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/h2-console/**").permitAll()
                     .anyRequest().authenticated()
             )
             .headers(headers -> headers

@@ -41,7 +41,7 @@ public interface ConnectionRepository extends JpaRepository<Connection, Long> {
   @Query("""
   SELECT c FROM Connection c
   WHERE
-    (c.initiator.id IN (:currentUserId, :targetUserId) AND c.target.id IN (:currentUserId, :targetUserId))     
+    (c.initiator.id IN (:currentUserId, :targetUserId) AND c.target.id IN (:currentUserId, :targetUserId))
   """)
   Optional<Connection> getConnectionStatus(@Param("currentUserId") String currentUserId, @Param("targetUserId") String targetUserId);
 

@@ -9,5 +9,4 @@ public class CreateMessageRequest {
   private long conversationId;
   private String content;
   private String senderId;
-  private String sentAt;
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "VOTES")
@@ -19,14 +21,20 @@ public class Vote {
   @Column(nullable = false)
   private boolean vote;
 
-  private long postId;
+  @ManyToOne
+  @JoinColumn(name = "post_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Post post;
 
-  private String profileId;
+  @ManyToOne
+  @JoinColumn(name = "profile_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Profile profile;
 
-  public Vote(boolean vote, long postId, String profileId) {
+  public Vote(boolean vote, Post post, Profile profile) {
     this.vote = vote;
-    this.postId = postId;
-    this.profileId = profileId;
+    this.post = post;
+    this.profile = profile;
   }
 }
 

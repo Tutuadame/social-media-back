@@ -32,8 +32,8 @@ public class PostServiceImpl implements PostService {
     Profile profile = profileRepository.findById(profileId).orElseThrow(NoSuchElementException::new);
     Post post = new Post(content, profile);
     post = postRepository.save(post);
-    int likes = voteRepository.countVotesByPostIdAndVote(post.getId(), true);
-    int dislikes = voteRepository.countVotesByPostIdAndVote(post.getId(), false);
+    int likes = voteRepository.countByPostIdAndVote(post.getId(), true);
+    int dislikes = voteRepository.countByPostIdAndVote(post.getId(), false);
     return new PostResponse(post, likes, dislikes);
   }
 
@@ -52,8 +52,8 @@ public class PostServiceImpl implements PostService {
             .toList();
 
     return postRepository.findPostsByConnections(targetIds, pageable).map((post) -> {
-      int likes = voteRepository.countVotesByPostIdAndVote(post.getId(), true);
-      int dislikes = voteRepository.countVotesByPostIdAndVote(post.getId(), false);
+      int likes = voteRepository.countByPostIdAndVote(post.getId(), true);
+      int dislikes = voteRepository.countByPostIdAndVote(post.getId(), false);
       return new PostResponse(post, likes, dislikes);
     });
   }
@@ -62,8 +62,8 @@ public class PostServiceImpl implements PostService {
   public Page<PostResponse> getPostsFromUser(Pageable pageable, String profileId) {
     Page<Post> posts = postRepository.findPostByProfileId(profileId, pageable);
     return posts.map(post -> {
-      int likes = voteRepository.countVotesByPostIdAndVote(post.getId(), true);
-      int dislikes = voteRepository.countVotesByPostIdAndVote(post.getId(), false);
+      int likes = voteRepository.countByPostIdAndVote(post.getId(), true);
+      int dislikes = voteRepository.countByPostIdAndVote(post.getId(), false);
       return new PostResponse(post, likes, dislikes);
     });
   }

@@ -7,10 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import project.school.socialmedia.dto.request.UpdateProfileRequest;
-import project.school.socialmedia.dto.response.UserResponse;
 import project.school.socialmedia.service.ProfileService;
 import project.school.socialmedia.service.TokenService;
-import project.school.socialmedia.service.TokenServiceException;
+import project.school.socialmedia.exception.TokenServiceException;
 import project.school.socialmedia.service.impl.ProfileServiceImpl;
 import project.school.socialmedia.service.impl.TokenServiceImpl;
 
@@ -37,13 +36,6 @@ public class AuthProfileController {
     setToken();
     String responseBody = profileService.updateUser(updateProfileRequest, id, clientToken);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);
-  }
-
-  @GetMapping("/profile/{id}")
-  public ResponseEntity<UserResponse> getProfile(@PathVariable String id) throws JsonProcessingException {
-    setToken();
-    UserResponse userResponse = profileService.getUser(id, clientToken);
-    return ResponseEntity.ok(userResponse);
   }
 
   @DeleteMapping("/delete-profile/{id}")

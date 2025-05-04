@@ -1,0 +1,335 @@
+@startuml
+
+' DOMAIN ENTITIES
+package "domain" {
+  class Conversation {
+    - id: long
+    - name: String
+    - memberConversations: List<MemberConversations>
+    + Conversation(name: String)
+  }
+
+  class Member {
+    - id: String
+    - firstName: String
+    - lastName: String
+    - picture: String
+    - memberConversations: List<MemberConversations>
+    + Member(id: String, firstName: String, lastName: String, picture: String)
+  }
+
+  class MemberConversations {
+    - id: Long
+    - member: Member
+    - conversation: Conversation
+    + MemberConversations(member: Member, conversation: Conversation)
+  }
+
+  class Message {
+    - id: Long
+    - conversationId: long
+    - memberId: String
+    - sentAt: LocalDateTime
+    - content: String
+    + Message(conversationId: long, memberId: String, sentAt: LocalDateTime, content: String)
+  }
+}
+
+' REPOSITORIES
+package "repository" {
+  interface ConversationRepository {
+    + findById(id: long): Optional<Conversation>
+    + findAll(pageable: Pageable): Page<Conversation>
+    + existsById(conversationId: long): boolean
+    + searchByNameForMember(name: String, memberId: String, pageable: Pageable): Page<Conversation>
+  }
+
+  interface MemberConversationsRepository {
+    + findByMemberId(memberId: String, pageable: Pageable): Page<MemberConversations>
+    + findByConversationId(conversationId: Long): List<MemberConversations>
+    + isMemberOfConversation(conversationId: Long, memberId: String): boolean
+    + deleteByMemberId(id: String): void
+    + deleteByMemberIdAndConversationId(memberId: String, conversationId: Long): void
+  }
+
+  interface MemberRepository {
+    + searchByName(name: String, pageable: Pageable): Page<Member>
+  }
+
+  interface MessageRepository {
+    + findByConversationIdOrderBySentAtDesc(conversationId: Long, pageable: Pageable): Page<Message>
+  }
+}
+
+' DTOs
+package "dto" {
+  package "kafka" {
+    class Notification {
+      - userIds: List<String>
+      - message: String
+      - createdAt: LocalDateTime
+    }
+  }
+
+  package "request.conversation" {
+    class CreateConversationRequest {
+      - members: String[]
+      - name: String
+    }
+
+    class GetConversationsRequest {
+      - pageNumber: int
+      - pageSize: int
+    }
+
+    class UpdateNamingRequest {
+      - name: String
+    }
+  }
+
+  package "request.member" {
+    class AddMemberRequest {
+      - memberId: String
+      - conversationId: long
+    }
+
+    class CheckConnectionsBatchRequest {
+      - requesterId: String
+      - targetIds: List<String>
+    }
+
+    class CreateMemberRequest {
+      - memberId: String
+      - firstName: String
+      - lastName: String
+    }
+
+    class DeleteMemberFromConversationRequest {
+      - memberId: String
+      - conversationId: long
+    }
+  }
+
+  package "request.message" {
+    class CreateMessageRequest {
+      - conversationId: long
+      - content: String
+      - senderId: String
+      - sentAt: String
+    }
+
+    class GetMessagesRequest {
+      - pageNumber: int
+      - pageSize: int
+    }
+
+    class UpdateMessageRequest {
+      - messageContent: String
+    }
+  }
+
+  package "response.conversation" {
+    class ConversationResponse {
+      - id: String
+      - name: String
+      - memberIds: List<String>
+    }
+
+    class SimpleConversationResponse {
+      - id: long
+      - name: String
+    }
+  }
+
+  package "response.member" {
+    class CheckConnectionsBatchResponse {
+      - connectedIds: List<String>
+    }
+
+    class MemberResponse {
+      - id: String
+      - firstName: String
+      - lastName: String
+      - picture: String
+    }
+  }
+
+  package "response.message" {
+    class MessageResponse {
+      - id: long
+      - senderId: String
+      - content: String
+      - sentAt: String
+    }
+
+    class SimpleMessageResponse {
+      - id: long
+      - content: String
+      - sentAt: String
+    }
+  }
+}
+
+' SERVICES
+package "service" {
+  interface ConversationService {
+    + get(conversationId: long): Conversation
+    + delete(conversationId: long): String
+    + update(conversationId: long, modifiedConversation: UpdateNamingRequest): Conversation
+    + create(createConversationRequest: CreateConversationRequest): Conversation
+    + getMemberConversations(memberId: String, pageable: Pageable): Page<SimpleConversationResponse>
+    + searchByName(name: String, memberId: String, pageable: Pageable): Page<SimpleConversationResponse>
+    + getConversation(conversationId: String): ConversationResponse
+  }
+
+  interface MemberService {
+    + create(createMemberRequest: CreateMemberRequest): Member
+    + add(addMemberRequest: AddMemberRequest): MemberResponse
+    + delete(memberId: String): String
+    + deleteFromConversation(memberId: String, conversationId: Long): String
+    + getConversationMembers(members: List<String>): List<MemberResponse>
+    + searchForMembersByName(name: String, requesterId: String, pageable: Pageable): Page<MemberResponse>
+  }
+
+  interface MessageService {
+    + get(conversationId: long, pageable: Pageable): Page<MessageResponse>
+    + delete(messageId: long): String
+    + update(messageId: long, updateMessageRequest: UpdateMessageRequest): SimpleMessageResponse
+    + create(request: CreateMessageRequest): MessageResponse
+  }
+}
+
+' SERVICE IMPLEMENTATIONS
+package "service.impl" {
+  class ConversationServiceImpl {
+    - conversationRepository: ConversationRepository
+    - memberRepository: MemberRepository
+    - memberConversationsRepository: MemberConversationsRepository
+    + get(conversationId: long): Conversation
+    + delete(conversationId: long): String
+    + update(conversationId: long, modifiedConversation: UpdateNamingRequest): Conversation
+    + create(createConversationRequest: CreateConversationRequest): Conversation
+    + getMemberConversations(memberId: String, pageable: Pageable): Page<SimpleConversationResponse>
+    + searchByName(name: String, memberId: String, pageable: Pageable): Page<SimpleConversationResponse>
+    + getConversation(conversationId: String): ConversationResponse
+    - isNameValid(name: String): boolean
+    - findConversation(conversationId: long): Conversation
+  }
+
+  class MemberServiceImpl {
+    - memberRepository: MemberRepository
+    - memberConversationsRepository: MemberConversationsRepository
+    - conversationRepository: ConversationRepository
+    - restTemplate: RestTemplate
+    + create(createMemberRequest: CreateMemberRequest): Member
+    + add(addMemberRequest: AddMemberRequest): MemberResponse
+    + delete(memberId: String): String
+    + deleteFromConversation(memberId: String, conversationId: Long): String
+    + getConversationMembers(members: List<String>): List<MemberResponse>
+    + searchForMembersByName(name: String, requesterId: String, pageable: Pageable): Page<MemberResponse>
+    - findMember(memberId: String): Member
+    - findConversation(conversationId: long): Conversation
+    - getConnectedMemberIds(requesterId: String, targetIds: List<String>): List<String>
+  }
+
+  class MessageServiceImpl {
+    - messageRepository: MessageRepository
+    - memberConversationsRepository: MemberConversationsRepository
+    - conversationRepository: ConversationRepository
+    - memberRepository: MemberRepository
+    - kafkaTemplate: KafkaTemplate<String, String>
+    - kafkaConfigProps: KafkaConfigProps
+    - objectMapper: ObjectMapper
+    + get(conversationId: long, pageable: Pageable): Page<MessageResponse>
+    + delete(messageId: long): String
+    + update(messageId: long, updateMessageRequest: UpdateMessageRequest): SimpleMessageResponse
+    + create(request: CreateMessageRequest): MessageResponse
+    - findMessage(messageId: long): Message
+    - isMember(conversationId: long, memberId: String): boolean
+    - createNotification(request: CreateMessageRequest, sentAt: LocalDateTime): Notification
+    - sendNotificationWithKafka(notification: Notification): void
+  }
+}
+
+' CONTROLLERS
+package "controller" {
+  class ConversationController {
+    - conversationServiceImpl: ConversationServiceImpl
+    + deleteConversation(conversationId: long): ResponseEntity<String>
+    + updateConversationName(conversationId: long, updateNamingRequest: UpdateNamingRequest): ResponseEntity<SimpleConversationResponse>
+    + createConversation(createConversationRequest: CreateConversationRequest): ResponseEntity<SimpleConversationResponse>
+    + getConversation(conversationId: String): ResponseEntity<ConversationResponse>
+    + getConversations(memberId: String, getConversationsRequest: GetConversationsRequest): ResponseEntity<Page<SimpleConversationResponse>>
+    + searchForConversations(name: String, requesterId: String, pageSize: int, pageNumber: int): ResponseEntity<Page<SimpleConversationResponse>>
+  }
+
+  class MemberController {
+    - memberServiceImpl: MemberServiceImpl
+    + createMember(createMemberRequest: CreateMemberRequest): ResponseEntity<Member>
+    + deleteMember(memberId: String): ResponseEntity<String>
+    + addMember(addMemberRequest: AddMemberRequest): ResponseEntity<MemberResponse>
+    + deleteMemberFromConversation(deleteMemberFromConversationRequest: DeleteMemberFromConversationRequest): ResponseEntity<String>
+    + searchForMembers(name: String, requesterId: String, pageSize: int, pageNumber: int): ResponseEntity<Page<MemberResponse>>
+    + getMembers(members: List<String>): ResponseEntity<List<MemberResponse>>
+  }
+
+  class MessageController {
+    - messageServiceImpl: MessageServiceImpl
+    + updateMessage(messageId: long, updateMessageRequest: UpdateMessageRequest): ResponseEntity<SimpleMessageResponse>
+    + createMessage(createMessageRequest: CreateMessageRequest): ResponseEntity<MessageResponse>
+    + deleteMessage(messageId: long): ResponseEntity<String>
+    + getConversationMessages(conversationId: long, getMessagesRequest: GetMessagesRequest): ResponseEntity<Page<MessageResponse>>
+  }
+}
+
+' RELATIONSHIPS
+
+' Domain relationships
+Conversation "1" -- "many" MemberConversations
+Member "1" -- "many" MemberConversations
+MemberConversations "many" --* "1" Conversation : belongs to >
+MemberConversations "many" --* "1" Member : belongs to >
+
+' Repository relationships (extend JpaRepository)
+ConversationRepository ..> Conversation : manages >
+MemberConversationsRepository ..> MemberConversations : manages >
+MemberRepository ..> Member : manages >
+MessageRepository ..> Message : manages >
+
+' Service implementations
+ConversationServiceImpl ..|> ConversationService
+MemberServiceImpl ..|> MemberService
+MessageServiceImpl ..|> MessageService
+
+' Services use repositories
+ConversationServiceImpl --> ConversationRepository
+ConversationServiceImpl --> MemberRepository
+ConversationServiceImpl --> MemberConversationsRepository
+MemberServiceImpl --> MemberRepository
+MemberServiceImpl --> MemberConversationsRepository
+MemberServiceImpl --> ConversationRepository
+MessageServiceImpl --> MessageRepository
+MessageServiceImpl --> MemberConversationsRepository
+MessageServiceImpl --> ConversationRepository
+MessageServiceImpl --> MemberRepository
+
+' Controllers use services
+ConversationController --> ConversationServiceImpl
+MemberController --> MemberServiceImpl
+MessageController --> MessageServiceImpl
+
+' Controllers use DTOs
+ConversationController ..> CreateConversationRequest
+ConversationController ..> UpdateNamingRequest
+ConversationController ..> ConversationResponse
+ConversationController ..> SimpleConversationResponse
+MemberController ..> CreateMemberRequest
+MemberController ..> AddMemberRequest
+MemberController ..> DeleteMemberFromConversationRequest
+MemberController ..> MemberResponse
+MessageController ..> CreateMessageRequest
+MessageController ..> UpdateMessageRequest
+MessageController ..> MessageResponse
+MessageController ..> SimpleMessageResponse
+
+@enduml

@@ -1,6 +1,5 @@
 package project.school.socialmedia.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import project.school.socialmedia.dto.request.connections.CreateConnectionRequest;

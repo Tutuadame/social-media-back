@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -16,21 +18,27 @@ public class Message {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Column
-  private long conversationId;
-  @Column
-  private String memberId;
+
+  @ManyToOne
+  @JoinColumn(name = "conversation_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Conversation conversation;  // Changed from long conversationId
+
+  @ManyToOne
+  @JoinColumn(name = "member_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Member member;  // Changed from String memberId
+
   @Column
   private LocalDateTime sentAt;
+
   @Column
   private String content;
 
-  public Message(long conversationId, String memberId, LocalDateTime sentAt, String content) {
-    this.conversationId = conversationId;
-    this.memberId = memberId;
+  public Message(Conversation conversation, Member member, LocalDateTime sentAt, String content) {
+    this.conversation = conversation;
+    this.member = member;
     this.sentAt = sentAt;
     this.content = content;
   }
-
-
 }

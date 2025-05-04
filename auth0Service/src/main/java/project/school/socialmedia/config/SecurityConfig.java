@@ -23,16 +23,10 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http    .cors(Customizer.withDefaults())
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     .anyRequest().authenticated()
             )
-            .headers(headers -> headers
-                    .contentSecurityPolicy(csp -> csp
-                            .policyDirectives("frame-ancestors *")
-                    )
-            )
             .oauth2ResourceServer(oauth2 -> oauth2
-              .jwt(jwt -> jwt.decoder(jwtDecoder()))
+                    .jwt(jwt -> jwt.decoder(jwtDecoder()))
             );
 
     return http.build();

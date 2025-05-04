@@ -9,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import project.school.socialmedia.dto.request.UpdateProfileRequest;
-import project.school.socialmedia.dto.response.UserResponse;
 import project.school.socialmedia.service.impl.ProfileServiceImpl;
 import project.school.socialmedia.util.RequestException;
 import project.school.socialmedia.util.RequestUtils;

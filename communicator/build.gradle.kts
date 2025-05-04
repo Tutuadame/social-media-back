@@ -32,6 +32,8 @@ dependencies {
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4")
 	implementation("com.auth0:auth0-spring-security-api:1.4.0")
 	implementation("org.springframework.kafka:spring-kafka")
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+	implementation("com.auth0:java-jwt:4.4.0")
 }
 
 tasks.withType<Test> {

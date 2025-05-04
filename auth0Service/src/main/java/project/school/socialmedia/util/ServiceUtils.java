@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import project.school.socialmedia.dto.response.TokenResponse;
-import project.school.socialmedia.dto.response.UserResponse;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,10 +35,6 @@ public class ServiceUtils {
 
   public TokenResponse convertToTokenDTO(String content) throws JsonProcessingException {
     return objectMapper.readValue(content, TokenResponse.class);
-  }
-
-  public UserResponse convertToUserResponse(String auth0User) throws JsonProcessingException {
-    return objectMapper.readValue(auth0User, UserResponse.class);
   }
 }
 

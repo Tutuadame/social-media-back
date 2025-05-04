@@ -3,14 +3,10 @@ package project.school.socialmedia.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import project.school.socialmedia.dto.request.UpdateProfileRequest;
-import project.school.socialmedia.dto.response.UserResponse;
 import project.school.socialmedia.service.ProfileService;
 import project.school.socialmedia.service.RequestMethod;
-import project.school.socialmedia.util.RequestException;
 import project.school.socialmedia.util.RequestUtils;
 import project.school.socialmedia.util.ServiceUtils;
 
@@ -48,12 +44,6 @@ public class ProfileServiceImpl implements ProfileService {
     return response.body();
   }
 
-  public UserResponse getUser(String userId, String accessToken) throws JsonProcessingException {
-    String getURL = "https://" + domain + "/api/v2/users/auth0" + SEPARATOR + userId;
-    HttpResponse<String> response = requestUtils.sendAuthorizedRequest(RequestMethod.GET, getURL, "", accessToken);
-    return serviceUtils.convertToUserResponse(response.body());
-  }
-
   public String deleteUser(String userId, String accessToken) {
     String deleteURL = generateAccessURL(userId);
     HttpResponse<String> response = requestUtils.sendAuthorizedRequest(RequestMethod.DELETE, deleteURL, "", accessToken);
@@ -62,9 +52,5 @@ public class ProfileServiceImpl implements ProfileService {
 
   private String generateAccessURL(String userId) {
     return String.format("https://%s/api/v2/users/auth0%s%s", domain, SEPARATOR, userId);
-  }
-
-  private String getErrorMessage(Exception e) {
-    return "Error: " + e.getMessage();
   }
 }

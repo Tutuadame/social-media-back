@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"memberConversations"})
+@ToString(exclude = {"memberConversations", "messages"})
 public class Conversation {
 
   @Id
@@ -24,11 +24,15 @@ public class Conversation {
   @Column
   private String name;
 
-  @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<MemberConversations> memberConversations;
+
+  @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Message> messages;  // Add this
 
   public Conversation(String name){
     this.name = name;
     this.memberConversations = new ArrayList<>();
+    this.messages = new ArrayList<>();
   }
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -24,6 +26,8 @@ public class Post {
   private LocalDateTime createdAt;
 
   @ManyToOne
+  @JoinColumn(name = "profile_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)  // Add this
   private Profile profile;
 
   public Post(String content, Profile profile){

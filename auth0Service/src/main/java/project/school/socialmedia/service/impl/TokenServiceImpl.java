@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import project.school.socialmedia.dto.response.TokenResponse;
 import project.school.socialmedia.service.RequestMethod;
 import project.school.socialmedia.service.TokenService;
-import project.school.socialmedia.service.TokenServiceException;
+import project.school.socialmedia.exception.TokenServiceException;
 import project.school.socialmedia.util.RequestException;
 import project.school.socialmedia.util.RequestUtils;
 import project.school.socialmedia.util.ServiceUtils;

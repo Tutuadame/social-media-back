@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -59,29 +59,26 @@ public class MemberServiceImpl implements MemberService {
   public String delete(String memberId) {
     Member member = findMember(memberId);
     memberRepository.delete(member);
-    memberConversationsRepository.deleteByMemberId(memberId);
+    memberConversationsRepository.deleteByMember_Id(memberId);
     return DELETE_SUCCESS;
   }
 
   @Transactional
   public String deleteFromConversation(String memberId, Long conversationId) {
-    memberConversationsRepository.deleteByMemberIdAndConversationId(memberId, conversationId);
-    List<MemberConversations> memberConversations = memberConversationsRepository.findByConversationId(conversationId);
-    if (memberConversations.isEmpty()) {
-      conversationRepository.deleteById(conversationId);
-      return DELETE_WITH_CONVERSATION_SUCCESS;
-    }
+    memberConversationsRepository.deleteByMember_IdAndConversation_Id(memberId, conversationId);
+    List<MemberConversations> memberConversations = memberConversationsRepository.findByConversation_Id(conversationId);
+    conversationRepository.deleteById(conversationId);
     return DELETE_SUCCESS;
   }
 
   @Transactional(readOnly = true)
-  public List<MemberResponse> getConversationMembers(List<String> members) {
-    List<Member> memberList = memberRepository.findAllById(members);
+  public List<MemberResponse> getConversationMembers(List<String> memberIds) {
+    List<Member> memberList = memberRepository.findAllById(memberIds);
     return memberList.stream().map(member -> new MemberResponse(member.getId(), member.getFirstName(), member.getLastName(), member.getPicture())).toList();
   }
 
   @Transactional(readOnly = true)
-  public Page<MemberResponse> searchForMembersByName(String name, String requesterId, Pageable pageable) {
+  public Page<MemberResponse> searchForMembersByName(String name, String requesterId, Pageable pageable, String accessToken) {
     Page<Member> membersPage = memberRepository.searchByName(name, pageable);
 
     List<Member> memberList = membersPage.getContent();
@@ -89,8 +86,7 @@ public class MemberServiceImpl implements MemberService {
             .map(Member::getId)
             .filter(id -> !id.equals(requesterId))
             .toList();
-
-    List<String> connectedIds = getConnectedMemberIds(requesterId, targetIds);
+    List<String> connectedIds = getConnectedMemberIds(requesterId, targetIds, accessToken);
 
     List<MemberResponse> filteredResponses = memberList.stream()
             .filter(member -> connectedIds.contains(member.getId()))
@@ -113,13 +109,20 @@ public class MemberServiceImpl implements MemberService {
     return conversationRepository.findById(conversationId).orElseThrow(() -> new NoSuchElementException(CONVERSATION_NOT_FOUND));
   }
 
-  private List<String> getConnectedMemberIds(String requesterId, List<String> targetIds) {
+  private List<String> getConnectedMemberIds(String requesterId, List<String> targetIds, String accessToken) {
     String url = "https://social.media:8445/connectionApi/checkConnectionsBatch";
     CheckConnectionsBatchRequest request = new CheckConnectionsBatchRequest(requesterId, targetIds);
 
     try {
+      // Create headers and add the access token
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.APPLICATION_JSON);
+      headers.setBearerAuth(accessToken);
+
+      HttpEntity<CheckConnectionsBatchRequest> entity = new HttpEntity<>(request, headers);
+
       ResponseEntity<CheckConnectionsBatchResponse> response =
-              restTemplate.postForEntity(url, request, CheckConnectionsBatchResponse.class);
+              restTemplate.exchange(url, HttpMethod.POST, entity, CheckConnectionsBatchResponse.class);
 
       return response.getBody() != null ? response.getBody().getConnectedIds() : List.of();
     } catch (Exception e) {

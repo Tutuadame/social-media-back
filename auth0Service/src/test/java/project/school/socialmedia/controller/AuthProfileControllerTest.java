@@ -1,21 +1,6 @@
 package project.school.socialmedia.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.junit.jupiter.api.*;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import project.school.socialmedia.dto.request.UpdateProfileRequest;
-import project.school.socialmedia.dto.response.UserResponse;
-import project.school.socialmedia.service.TokenServiceException;
-import project.school.socialmedia.service.impl.ProfileServiceImpl;
-import project.school.socialmedia.service.impl.TokenServiceImpl;
-import project.school.socialmedia.util.RequestException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
 /*@SpringBootTest
 class AuthProfileControllerTest {

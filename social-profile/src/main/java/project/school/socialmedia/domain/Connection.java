@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(
@@ -23,10 +25,12 @@ public class Connection {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "initiator_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)  // Add this
   private Profile initiator;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "target_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)  // Add this
   private Profile target;
 
   @Column(nullable = false)
@@ -38,5 +42,4 @@ public class Connection {
     this.target = target;
     this.status = status;
   }
-
 }

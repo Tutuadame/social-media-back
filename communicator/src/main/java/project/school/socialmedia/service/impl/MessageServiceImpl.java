@@ -9,6 +9,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.school.socialmedia.configuration.KafkaConfigProps;
+import project.school.socialmedia.domain.Conversation;
+import project.school.socialmedia.domain.Member;
 import project.school.socialmedia.domain.Message;
 import project.school.socialmedia.dto.kafka.Notification;
 import project.school.socialmedia.dto.request.message.CreateMessageRequest;
@@ -51,8 +53,8 @@ public class MessageServiceImpl {
     if(!conversationRepository.existsById(conversationId)){
       throw new NoSuchElementException(NOT_FOUND_CONVERSATION);
     }
-    return messageRepository.findByConversationIdOrderBySentAtDesc(conversationId, pageable)
-            .map(message -> new MessageResponse(message.getId(), message.getMemberId(), message.getContent(), message.getSentAt().toString()));
+    return messageRepository.findByConversation_IdOrderBySentAtDesc(conversationId, pageable)
+            .map(message -> new MessageResponse(message.getId(), message.getMember().getId(), message.getContent(), message.getSentAt().toString()));
   }
 
   @Transactional
@@ -75,23 +77,23 @@ public class MessageServiceImpl {
     if(!isMember(request.getConversationId(), request.getSenderId())) {
       throw new IllegalArgumentException("The user is not a member of this conversation!");
     }
+    Conversation conversation = conversationRepository.findById(request.getConversationId())
+            .orElseThrow(() -> new NoSuchElementException("No conversation found!"));
+    Member member = memberRepository.findById(request.getSenderId())
+            .orElseThrow(() -> new NoSuchElementException("No member found!"));
 
     if (request.getContent().isEmpty()) {
       throw new IllegalArgumentException("The message can not be empty!");
     }
 
     Message message = messageRepository.save(
-            new Message(
-                    request.getConversationId(),
-                    request.getSenderId(),
-                    LocalDateTime.parse(request.getSentAt()),
-                    request.getContent()
-            ));
+            new Message(conversation, member, LocalDateTime.now(), request.getContent())
+    );
 
     Notification notification = createNotification(request, message.getSentAt());
     sendNotificationWithKafka(notification);
 
-    return new MessageResponse(message.getId(), message.getMemberId(), message.getContent(), message.getSentAt().toString());
+    return new MessageResponse(message.getId(), message.getMember().getId(), message.getContent(), message.getSentAt().toString());
   }
 
   private Message findMessage(long messageId) throws NoSuchElementException {
@@ -107,7 +109,7 @@ public class MessageServiceImpl {
     String memberName = memberRepository.findById(request.getSenderId()).orElseThrow(NoSuchElementException::new).getFirstName();
     String notificationMessage = "You have a new message in "+convName+" from  "+memberName;
 
-    List<String> receiverIds = memberConversationsRepository.findByConversationId(request.getConversationId())
+    List<String> receiverIds = memberConversationsRepository.findByConversation_Id(request.getConversationId())
             .stream()
             .map(mCs  -> mCs.getMember().getId())
             .filter(receiverId -> !receiverId.equals(request.getSenderId()))

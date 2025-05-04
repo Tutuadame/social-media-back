@@ -1,4 +1,4 @@
-INSERT INTO PROFILE (id, picture, gender, first_name, last_name, introduction) VALUES ('6771a216a6339380c80b75a1', 'https://avatar.iran.liara.run/username?username=John+Doe', 'Male', 'John', 'Doe', 'Hello, I am John!');
+INSERT INTO PROFILE (id, picture, gender, first_name, last_name, introduction) VALUES ('681678f167fbe82d25efc5d7', 'https://avatar.iran.liara.run/username?username=John+Doe', 'Male', 'John', 'Doe', 'Hello, I am John!');
 INSERT INTO PROFILE (id, picture, gender, first_name, last_name, introduction) VALUES ('66fcffa773b84ab38485cd4a', 'https://avatar.iran.liara.run/username?username=Jane+Smith', 'Female', 'Jane', 'Smith', 'Love to travel and read.');
 INSERT INTO PROFILE (id, picture, gender, first_name, last_name, introduction) VALUES ('user8', 'https://avatar.iran.liara.run/username?username=Ethan+Moore', 'Male', 'Ethan', 'Moore', 'Tech enthusiast and AI researcher.');
 INSERT INTO PROFILE (id, picture, gender, first_name, last_name, introduction) VALUES ('user11', 'https://avatar.iran.liara.run/username?username=Ethan+Moore', 'Male', 'Ethan', 'Moore', 'Tech enthusiast and AI researcher.');
@@ -21,15 +21,15 @@ INSERT INTO PROFILE (id, picture, gender, first_name, last_name, introduction) V
 INSERT INTO PROFILE (id, picture, gender, first_name, last_name, introduction) VALUES ('user6', 'https://avatar.iran.liara.run/username?username=David+Taylor', 'Male', 'David', 'Taylor', 'Food enthusiast and home cook.');
 INSERT INTO PROFILE (id, picture, gender, first_name, last_name, introduction) VALUES ('user7', 'https://avatar.iran.liara.run/username?username=Emma+Anderson', 'Female', 'Emma', 'Anderson', 'Fitness lover and athlete.');
 
-INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('6771a216a6339380c80b75a1', 'user8', 'BLOCKED');
-INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('6771a216a6339380c80b75a1', 'user9', 'ACCEPTED');
-INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('6771a216a6339380c80b75a1', 'user10', 'ACCEPTED');
-INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('user3', '6771a216a6339380c80b75a1', 'PENDING');
-INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('user4', '6771a216a6339380c80b75a1', 'PENDING');
-INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('user5', '6771a216a6339380c80b75a1', 'PENDING');
-INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('user6', '6771a216a6339380c80b75a1', 'PENDING');
-INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('user7', '6771a216a6339380c80b75a1', 'PENDING');
-INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('6771a216a6339380c80b75a1', '66fcffa773b84ab38485cd4a', 'ACCEPTED');
+INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('681678f167fbe82d25efc5d7', 'user8', 'BLOCKED');
+INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('681678f167fbe82d25efc5d7', 'user9', 'ACCEPTED');
+INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('681678f167fbe82d25efc5d7', 'user10', 'ACCEPTED');
+INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('user3', '681678f167fbe82d25efc5d7', 'PENDING');
+INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('user4', '681678f167fbe82d25efc5d7', 'PENDING');
+INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('user5', '681678f167fbe82d25efc5d7', 'PENDING');
+INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('user6', '681678f167fbe82d25efc5d7', 'PENDING');
+INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('user7', '681678f167fbe82d25efc5d7', 'PENDING');
+INSERT INTO CONNECTIONS (initiator_id, target_id, status) VALUES ('681678f167fbe82d25efc5d7', '66fcffa773b84ab38485cd4a', 'ACCEPTED');
 
 INSERT INTO POST (content, profile_id, created_at) VALUES ('Nunc a augue eros. Sed vestibulum leo porttitor, volutpat metus id, venenatis ligula. Morbi molestie vel arcu consequat molestie. Etiam non vehicula sem. Phasellus dapibus rutrum nibh maximus ultricies. Nulla ut viverra mauris, in feugiat nisi.', 'user3', '2024-03-26 09:00:00');
 INSERT INTO POST (content, profile_id, created_at) VALUES ('Painting a new abstract piece.', 'user9', '2024-03-27 11:30:00');
@@ -41,27 +41,27 @@ INSERT INTO POST (content, profile_id, created_at) VALUES ('Started learning a n
 INSERT INTO POST (content, profile_id, created_at) VALUES ('Exploring space science documentaries.', 'user7', '2024-04-02 21:00:00');
 INSERT INTO POST (content, profile_id, created_at) VALUES ('Building a gaming PC.', 'user3', '2024-04-03 16:40:00');
 INSERT INTO POST (content, profile_id, created_at) VALUES ('Weekend road trip planned!', 'user9', '2024-04-04 08:30:00');
-INSERT INTO POST (content, profile_id, created_at) VALUES ('Morning jog at the park.', '6771a216a6339380c80b75a1', '2024-03-16 07:00:00');
+INSERT INTO POST (content, profile_id, created_at) VALUES ('Morning jog at the park.', '681678f167fbe82d25efc5d7', '2024-03-16 07:00:00');
 INSERT INTO POST (content, profile_id, created_at) VALUES ('New coding project started!', '66fcffa773b84ab38485cd4a', '2024-03-17 10:15:00');
-INSERT INTO POST (content, profile_id, created_at) VALUES ('Delicious homemade dinner tonight.', '6771a216a6339380c80b75a1', '2024-03-18 19:30:00');
+INSERT INTO POST (content, profile_id, created_at) VALUES ('Delicious homemade dinner tonight.', '681678f167fbe82d25efc5d7', '2024-03-18 19:30:00');
 INSERT INTO POST (content, profile_id, created_at) VALUES ('Watching a classic movie.', '66fcffa773b84ab38485cd4a', '2024-03-19 21:00:00');
-INSERT INTO POST (content, profile_id, created_at) VALUES ('Exploring photography as a new hobby.', '6771a216a6339380c80b75a1', '2024-03-20 14:45:00');
+INSERT INTO POST (content, profile_id, created_at) VALUES ('Exploring photography as a new hobby.', '681678f167fbe82d25efc5d7', '2024-03-20 14:45:00');
 INSERT INTO POST (content, profile_id, created_at) VALUES ('Reading about space exploration.', '66fcffa773b84ab38485cd4a', '2024-03-21 16:20:00');
-INSERT INTO POST (content, profile_id, created_at) VALUES ('Trying a new fitness routine.', '6771a216a6339380c80b75a1', '2024-03-22 06:30:00');
+INSERT INTO POST (content, profile_id, created_at) VALUES ('Trying a new fitness routine.', '681678f167fbe82d25efc5d7', '2024-03-22 06:30:00');
 INSERT INTO POST (content, profile_id, created_at) VALUES ('Learning a new programming language.', '66fcffa773b84ab38485cd4a', '2024-03-23 13:10:00');
-INSERT INTO POST (content, profile_id, created_at) VALUES ('Weekend getaway planned!', '6771a216a6339380c80b75a1', '2024-03-24 09:45:00');
+INSERT INTO POST (content, profile_id, created_at) VALUES ('Weekend getaway planned!', '681678f167fbe82d25efc5d7', '2024-03-24 09:45:00');
 INSERT INTO POST (content, profile_id, created_at) VALUES ('Experimenting with digital art.', '66fcffa773b84ab38485cd4a', '2024-03-25 17:30:00');
-INSERT INTO POST (content, profile_id, created_at) VALUES ('Enjoying a nice walk in the park.', '6771a216a6339380c80b75a1', '2024-03-10 10:00:00');
+INSERT INTO POST (content, profile_id, created_at) VALUES ('Enjoying a nice walk in the park.', '681678f167fbe82d25efc5d7', '2024-03-10 10:00:00');
 INSERT INTO POST (content, profile_id, created_at) VALUES ('Just finished reading a great book!', '66fcffa773b84ab38485cd4a', '2024-03-11 12:30:00');
-INSERT INTO POST (content, profile_id, created_at) VALUES ('Coffee time with friends!', '6771a216a6339380c80b75a1', '2024-03-12 15:45:00');
+INSERT INTO POST (content, profile_id, created_at) VALUES ('Coffee time with friends!', '681678f167fbe82d25efc5d7', '2024-03-12 15:45:00');
 INSERT INTO POST (content, profile_id, created_at) VALUES ('Exploring new hiking trails.', '66fcffa773b84ab38485cd4a', '2024-03-13 08:15:00');
-INSERT INTO POST (content, profile_id, created_at) VALUES ('Trying out a new recipe today!', '6771a216a6339380c80b75a1', '2024-03-14 20:00:00');
+INSERT INTO POST (content, profile_id, created_at) VALUES ('Trying out a new recipe today!', '681678f167fbe82d25efc5d7', '2024-03-14 20:00:00');
 INSERT INTO POST (content, profile_id, created_at) VALUES ('Movie night with family.', '66fcffa773b84ab38485cd4a', '2024-03-15 18:30:00');
 
 -- Votes on every post
 INSERT INTO VOTES (post_id, profile_id, vote) VALUES (1, '66fcffa773b84ab38485cd4a', true);
-INSERT INTO VOTES (post_id, profile_id, vote) VALUES (2, '6771a216a6339380c80b75a1', true);
+INSERT INTO VOTES (post_id, profile_id, vote) VALUES (2, '681678f167fbe82d25efc5d7', true);
 INSERT INTO VOTES (post_id, profile_id, vote) VALUES (3, '66fcffa773b84ab38485cd4a', false);
-INSERT INTO VOTES (post_id, profile_id, vote) VALUES (4, '6771a216a6339380c80b75a1', true);
+INSERT INTO VOTES (post_id, profile_id, vote) VALUES (4, '681678f167fbe82d25efc5d7', true);
 INSERT INTO VOTES (post_id, profile_id, vote) VALUES (5, '66fcffa773b84ab38485cd4a', true);
-INSERT INTO VOTES (post_id, profile_id, vote) VALUES (6, '6771a216a6339380c80b75a1', false);
+INSERT INTO VOTES (post_id, profile_id, vote) VALUES (6, '681678f167fbe82d25efc5d7', false);

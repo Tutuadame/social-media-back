@@ -70,7 +70,7 @@ public class ConversationServiceImpl implements ConversationService {
 
   @Transactional(readOnly = true)
   public Page<SimpleConversationResponse> getMemberConversations(String memberId, Pageable pageable) {
-    Page<MemberConversations> memberConversations = memberConversationsRepository.findByMemberId(memberId, pageable);
+    Page<MemberConversations> memberConversations = memberConversationsRepository.findByMember_Id(memberId, pageable);
     return memberConversations.map(mCs -> new SimpleConversationResponse(mCs.getConversation().getId(), mCs.getConversation().getName()));
   }
 
