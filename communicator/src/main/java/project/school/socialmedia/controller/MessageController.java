@@ -51,12 +51,13 @@ public class MessageController {
     );
   }
 
-  @PostMapping("/{conversationId}")
+  @GetMapping("/")
   public ResponseEntity<Page<MessageResponse>> getConversationMessages(
-          @PathVariable long conversationId,
-          @RequestBody GetMessagesRequest getMessagesRequest
+          @RequestParam long conversationId,
+          @RequestParam int pageNumber,
+          @RequestParam int pageSize
   ) {
-    Pageable pageable = PageRequest.of(getMessagesRequest.getPageNumber(), getMessagesRequest.getPageSize());
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
     Page<MessageResponse> messageResponsePage = messageServiceImpl.get(conversationId, pageable);
     return ResponseEntity.status(200).body(messageResponsePage);
   }

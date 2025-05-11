@@ -1,6 +1,5 @@
 package project.school.socialmedia.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.school.socialmedia.dto.request.connections.CheckConnectionsBatchRequest;
 import project.school.socialmedia.dto.request.connections.CreateConnectionRequest;
-import project.school.socialmedia.dto.request.connections.GetPageablePendingConnectionsRequest;
 import project.school.socialmedia.dto.request.connections.UpdateConnectionsStatusRequest;
 import project.school.socialmedia.dto.response.connection.CheckConnectionsBatchResponse;
 import project.school.socialmedia.dto.response.connection.ConnectionResponse;
@@ -25,7 +23,7 @@ import java.util.List;
 public class ConnectionsController {
   private final ConnectionService connectionService;
 
-  @PostMapping("/connections/accepted/{profileId}")
+  @GetMapping("/connections/accepted/{profileId}")
   public ResponseEntity<List<ConnectionResponse>> getAcceptedConnectionsByUser(
           @PathVariable String profileId
   ){
@@ -33,12 +31,13 @@ public class ConnectionsController {
     return ResponseEntity.status(HttpStatus.OK).body(connectionResponses);
   }
 
-  @PostMapping("/connections/pending/{profileId}")
+  @GetMapping("/connections/pending")
   public ResponseEntity<Page<ConnectionResponse>> getPendingConnectionsByUser(
-          @PathVariable String profileId,
-          @RequestBody  GetPageablePendingConnectionsRequest getPageablePendingConnectionsRequest
+          @RequestParam String profileId,
+          @RequestParam int pageNumber,
+          @RequestParam int pageSize
   ){
-    Pageable pageable = PageRequest.of(getPageablePendingConnectionsRequest.getPageNumber(), getPageablePendingConnectionsRequest.getPageSize());
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
     Page<ConnectionResponse> connectionResponses = connectionService.getPendingConnections(profileId, pageable);
     return ResponseEntity.status(HttpStatus.OK).body(connectionResponses);
   }

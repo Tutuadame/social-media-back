@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CheckConnectionsBatchRequest {
   private String requesterId;
   private List<String> targetIds;

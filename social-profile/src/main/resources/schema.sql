@@ -33,7 +33,3 @@ CREATE TABLE VOTES (
     CONSTRAINT FK_VOTES_POST FOREIGN KEY(post_id) REFERENCES POST(id) ON DELETE CASCADE,
     CONSTRAINT FK_VOTES_USER FOREIGN KEY(profile_id) REFERENCES PROFILE(id) ON DELETE CASCADE
 );
-
-CREATE INDEX idx_posts_profile_id ON POST(profile_id);
-CREATE INDEX idx_connections ON CONNECTIONS (initiator_id, target_id);
-CREATE INDEX idx_connections_reverse ON CONNECTIONS (target_id, initiator_id);

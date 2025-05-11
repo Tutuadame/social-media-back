@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.school.socialmedia.dto.request.post.CreatePostRequest;
-import project.school.socialmedia.dto.request.post.GetPageablePostsRequest;
 import project.school.socialmedia.dto.response.post.PostResponse;
 import project.school.socialmedia.service.PostService;
 
@@ -19,24 +18,26 @@ public class PostController {
 
   private final PostService postService;
 
-  @PostMapping("/activity/{profileId}")
+  @PostMapping("/activity")
   public ResponseEntity<Page<PostResponse>> getProfilePosts(
-          @PathVariable String profileId,
-          @RequestBody GetPageablePostsRequest getPageablePostsRequest
+          @RequestParam String profileId,
+          @RequestParam int pageNumber,
+          @RequestParam int pageSize
   ) {
-    Pageable pageable = PageRequest.of(getPageablePostsRequest.getPageNumber(), getPageablePostsRequest.getPageSize());
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
     Page<PostResponse> postResponses = postService.getPostsFromUser(
             pageable, profileId
     );
     return ResponseEntity.status(HttpStatus.OK).body(postResponses);
   }
 
-  @PostMapping("/home/{profileId}")
+  @GetMapping("/home")
   public ResponseEntity<Page<PostResponse>> getConnectionPosts(
-          @PathVariable String profileId,
-          @RequestBody GetPageablePostsRequest getPageablePostsRequest
+          @RequestParam String profileId,
+          @RequestParam int pageNumber,
+          @RequestParam int pageSize
   ) {
-    Pageable pageable = PageRequest.of(getPageablePostsRequest.getPageNumber(), getPageablePostsRequest.getPageSize());
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
     Page<PostResponse> postResponses = postService.getPostsFromConnections(
             pageable, profileId
     );

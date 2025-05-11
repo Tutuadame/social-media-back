@@ -51,7 +51,7 @@ public class PostServiceImpl implements PostService {
             connection.getInitiator().getId() : connection.getTarget().getId())
             .toList();
 
-    return postRepository.findPostsByConnections(targetIds, pageable).map((post) -> {
+    return postRepository.findPostsByConnections(targetIds, pageable).map( post -> {
       int likes = voteRepository.countByPostIdAndVote(post.getId(), true);
       int dislikes = voteRepository.countByPostIdAndVote(post.getId(), false);
       return new PostResponse(post, likes, dislikes);

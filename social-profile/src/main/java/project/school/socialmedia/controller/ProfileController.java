@@ -21,7 +21,6 @@ public class ProfileController {
 
   private final ProfileService profileService;
 
-  //Auth0 registration
   @PostMapping("/new")
   public ResponseEntity<ProfileResponse> createProfile (
           @RequestBody CreateProfileRequest createProfileRequest
@@ -30,7 +29,6 @@ public class ProfileController {
     return ResponseEntity.status(HttpStatus.CREATED).body(profileResponse);
   }
 
-  //Auth0 delete
   @DeleteMapping("/{profileId}")
   public ResponseEntity<String> deleteProfile (
           @PathVariable String profileId
@@ -39,7 +37,7 @@ public class ProfileController {
     return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Profile deleted!");
   }
 
-  @PostMapping("/{profileId}")
+  @GetMapping("/{profileId}")
   public ResponseEntity<ProfileResponse> getProfile (@PathVariable String profileId) {
     ProfileResponse profileResponse = profileService.getUserProfile(profileId);
     return ResponseEntity.status(HttpStatus.OK).body(profileResponse);

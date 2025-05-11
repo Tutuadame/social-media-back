@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.school.socialmedia.domain.Conversation;
 import project.school.socialmedia.dto.request.conversation.CreateConversationRequest;
-import project.school.socialmedia.dto.request.conversation.GetConversationsRequest;
 import project.school.socialmedia.dto.request.conversation.UpdateNamingRequest;
 import project.school.socialmedia.dto.response.conversation.ConversationResponse;
 import project.school.socialmedia.dto.response.conversation.SimpleConversationResponse;
@@ -58,12 +57,13 @@ public class ConversationController {
     return ResponseEntity.status(200).body(conversation);
   }
 
-  @PostMapping("/conversations/{memberId}")
+  @GetMapping("/conversations")
   public ResponseEntity<Page<SimpleConversationResponse>> getConversations (
-          @PathVariable String memberId,
-          @RequestBody GetConversationsRequest getConversationsRequest
+          @RequestParam String memberId,
+          @RequestParam int pageSize,
+          @RequestParam int pageNumber
   ) {
-    Pageable pageable = PageRequest.of(getConversationsRequest.getPageNumber(), getConversationsRequest.getPageSize());
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
     Page<SimpleConversationResponse> conversationPage = conversationServiceImpl.getMemberConversations(memberId, pageable);
     return ResponseEntity.status(200).body(conversationPage);
   }

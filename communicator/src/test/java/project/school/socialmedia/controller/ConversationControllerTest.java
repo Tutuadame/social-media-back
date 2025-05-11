@@ -1,102 +1,190 @@
 package project.school.socialmedia.controller;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import project.school.socialmedia.domain.Conversation;
+import project.school.socialmedia.dto.request.conversation.CreateConversationRequest;
+import project.school.socialmedia.dto.request.conversation.UpdateNamingRequest;
+import project.school.socialmedia.dto.response.conversation.ConversationResponse;
+import project.school.socialmedia.dto.response.conversation.SimpleConversationResponse;
+import project.school.socialmedia.service.impl.ConversationServiceImpl;
+
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
 class ConversationControllerTest {
 
- /* @Mock
-  private ConversationService conversationService;
+  @Mock
+  private ConversationServiceImpl conversationService;
+
   @InjectMocks
   private ConversationController conversationController;
 
   @BeforeEach
-  void setup() {
-    this.conversationController = new ConversationController(conversationService);
-  }
-
-  @AfterEach
-  void reset() {
-    this.conversationController = null;
+  void setUp() {
+    MockitoAnnotations.openMocks(this);
   }
 
   @Test
-  @DisplayName("Should create a new conversation when a proper name is provided!")
-  void shouldCreateConversationWhenThereIsAName() throws SQLIntegrityConstraintViolationException {
-    String testName = "test";
-    String[] memberIds = {};
-    CreateConversationRequest createConversationRequest = new CreateConversationRequest(memberIds, testName);
-    Conversation conversation = new Conversation(testName);
-    SimpleConversationResponse simpleConversationResponse = new SimpleConversationResponse(conversation.getId(), testName);
-    ResponseEntity<SimpleConversationResponse> conversationResponseEntity = ResponseEntity.status(201).body(simpleConversationResponse);
-    when(conversationService.create(any(CreateConversationRequest.class))).thenReturn(conversation);
+  void deleteConversation_ReturnsNoContent() {
+    // Arrange
+    long conversationId = 1L;
+    when(conversationService.delete(conversationId)).thenReturn("Conversation was deleted");
 
-    ResponseEntity<SimpleConversationResponse> result = conversationController.createConversation(createConversationRequest);
+    // Act
+    ResponseEntity<String> response = conversationController.deleteConversation(conversationId);
 
-    assertEquals(conversationResponseEntity, result);
+    // Assert
+    assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+    assertEquals("Conversation was deleted", response.getBody());
+    verify(conversationService).delete(conversationId);
   }
 
   @Test
-  @DisplayName("Should throw an exception for wrong while creating a new conversation!")
-  void shouldNotCreateConversationWhenNamingIsNotCorrect() throws SQLIntegrityConstraintViolationException {
-    String testName = "test";
-    String[] memberIds = {};
-    CreateConversationRequest createConversationRequest = new CreateConversationRequest(memberIds, testName);
-    when(conversationService.create(any(CreateConversationRequest.class))).thenThrow(new SQLIntegrityConstraintViolationException("test"));
+  void updateConversationName_ReturnsUpdatedConversation() {
+    // Arrange
+    long conversationId = 1L;
+    UpdateNamingRequest request = new UpdateNamingRequest();
+    request.setName("Updated Conversation");
 
-    assertThrows(SQLIntegrityConstraintViolationException.class, () -> {
-      conversationController.createConversation(createConversationRequest);
-    });
+    Conversation updatedConversation = new Conversation();
+    updatedConversation.setId(conversationId);
+    updatedConversation.setName("Updated Conversation");
+
+    when(conversationService.update(conversationId, request)).thenReturn(updatedConversation);
+
+    // Act
+    ResponseEntity<SimpleConversationResponse> response =
+            conversationController.updateConversationName(conversationId, request);
+
+    // Assert
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    SimpleConversationResponse result = response.getBody();
+    assertNotNull(result);
+    assertEquals(conversationId, result.getId());
+    assertEquals("Updated Conversation", result.getName());
+    verify(conversationService).update(conversationId, request);
   }
 
   @Test
-  @DisplayName("Conversation should be deleted when entity exists!")
-  void shouldDeleteConversationWhenIdCorrect() {
-    long conversationId = 0L;
-    String message = "Test delete";
-    when(conversationService.delete(anyLong())).thenReturn(message);
-    ResponseEntity<String> responseEntity = ResponseEntity.status(204).body(message);
+  void createConversation_ReturnsNewConversation() throws SQLIntegrityConstraintViolationException {
+    // Arrange
+    CreateConversationRequest request = new CreateConversationRequest();
+    request.setName("New Conversation");
+    request.setMembers(new String[]{"member1", "member2"});
 
-    ResponseEntity<String> result = conversationController.deleteConversation(conversationId);
+    Conversation newConversation = new Conversation();
+    newConversation.setId(1L);
+    newConversation.setName("New Conversation");
 
-    assertEquals(responseEntity, result);
+    when(conversationService.create(request)).thenReturn(newConversation);
+
+    // Act
+    ResponseEntity<SimpleConversationResponse> response =
+            conversationController.createConversation(request);
+
+    // Assert
+    assertEquals(HttpStatus.CREATED, response.getStatusCode());
+    SimpleConversationResponse result = response.getBody();
+    assertNotNull(result);
+    assertEquals(1L, result.getId());
+    assertEquals("New Conversation", result.getName());
+    verify(conversationService).create(request);
   }
 
-  /*@Test
-  @DisplayName("Conversation should be updated when entity exists and naming is correct!")
-  void shouldUpdateConversationWhenEverythingIsCorrect() {
-    long conversationId = 0L;
-    String newName = "new test conv";
-    Conversation changedConversation = new Conversation(newName);
-    Conversation result = new Conversation();
-    SimpleConversationResponse
-    ResponseEntity<SimpleConversationResponse> responseEntity = ResponseEntity.status(200).body(result);
+  @Test
+  void getConversation_ReturnsConversationDetails() {
+    // Arrange
+    String conversationId = "1";
+    List<String> memberIds = Arrays.asList("member1", "member2");
+    ConversationResponse expectedResponse = new ConversationResponse(conversationId, "Test Conversation", memberIds);
 
-    when(conversationService.get(anyLong())).thenReturn(oldConversation);
-    when(conversationService.update(anyLong(), any(UpdateConversation.class))).thenReturn(result);
+    when(conversationService.getConversation(conversationId)).thenReturn(expectedResponse);
 
+    // Act
+    ResponseEntity<ConversationResponse> response = conversationController.getConversation(conversationId);
 
-    ResponseEntity<SimpleConversationResponse> result = conversationController.updateConversation(conversationId, changedConversation);
+    // Assert
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    ConversationResponse result = response.getBody();
+    assertNotNull(result);
+    assertEquals(conversationId, result.getId());
+    assertEquals("Test Conversation", result.getName());
+    assertEquals(memberIds, result.getMemberIds());
+    verify(conversationService).getConversation(conversationId);
+  }
 
-    assertEquals(responseEntity, result);
-  }*/
+  @Test
+  void getConversations_ReturnsPageOfConversations() {
+    // Arrange
+    String memberId = "member1";
+    int pageNumber = 0;
+    int pageSize = 10;
 
-  /*@Test
-  @DisplayName("Conversation should not be updated when entity does not exist!")
-  void shouldNotUpdateConversationWhenEntityNotFound() {
-    long conversationId = 0L;
-    String newName = "new test conv";
-    Conversation changedConversation = new Conversation(newName);
+    List<SimpleConversationResponse> conversations = new ArrayList<>();
+    conversations.add(new SimpleConversationResponse(1L, "Conversation 1"));
+    conversations.add(new SimpleConversationResponse(2L, "Conversation 2"));
 
-    when(conversationService.update(anyLong(), any(Conversation.class))).thenThrow(new NoSuchElementException(""));
+    Page<SimpleConversationResponse> conversationPage = new PageImpl<>(conversations);
 
-    assertThrows(NoSuchElementException.class, () -> {
-      conversationController.updateConversation(conversationId, changedConversation);
-    });
-  }*/
+    when(conversationService.getMemberConversations(eq(memberId), any(Pageable.class)))
+            .thenReturn(conversationPage);
 
+    // Act
+    ResponseEntity<Page<SimpleConversationResponse>> response =
+            conversationController.getConversations(memberId, pageNumber, pageSize);
+
+    // Assert
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    Page<SimpleConversationResponse> result = response.getBody();
+    assertNotNull(result);
+    assertEquals(2, result.getContent().size());
+    verify(conversationService).getMemberConversations(eq(memberId), any(Pageable.class));
+  }
+
+  @Test
+  void searchForConversations_ReturnsMatchingConversations() {
+    // Arrange
+    String searchName = "Test";
+    String requesterId = "member1";
+    int pageSize = 10;
+    int pageNumber = 0;
+
+    List<SimpleConversationResponse> conversations = new ArrayList<>();
+    conversations.add(new SimpleConversationResponse(1L, "Test Conversation 1"));
+    conversations.add(new SimpleConversationResponse(2L, "Test Conversation 2"));
+
+    Page<SimpleConversationResponse> conversationPage = new PageImpl<>(conversations);
+
+    when(conversationService.searchByName(eq(searchName), eq(requesterId), any(Pageable.class)))
+            .thenReturn(conversationPage);
+
+    // Act
+    ResponseEntity<Page<SimpleConversationResponse>> response =
+            conversationController.searchForConversations(searchName, requesterId, pageSize, pageNumber);
+
+    // Assert
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    Page<SimpleConversationResponse> result = response.getBody();
+    assertNotNull(result);
+    assertEquals(2, result.getContent().size());
+    verify(conversationService).searchByName(eq(searchName), eq(requesterId), any(Pageable.class));
+  }
 }

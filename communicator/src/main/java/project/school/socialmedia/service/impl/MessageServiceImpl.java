@@ -77,8 +77,10 @@ public class MessageServiceImpl {
     if(!isMember(request.getConversationId(), request.getSenderId())) {
       throw new IllegalArgumentException("The user is not a member of this conversation!");
     }
+
     Conversation conversation = conversationRepository.findById(request.getConversationId())
             .orElseThrow(() -> new NoSuchElementException("No conversation found!"));
+
     Member member = memberRepository.findById(request.getSenderId())
             .orElseThrow(() -> new NoSuchElementException("No member found!"));
 

@@ -1,0 +1,1013 @@
+{
+	"info": {
+		"_postman_id": "17de0f62-ffc7-4c5c-a0d6-ef588fefb8ad",
+		"name": "Social Media",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "18215107"
+	},
+	"item": [
+		{
+			"name": "conversationApi",
+			"item": [
+				{
+					"name": "Get Conversations by user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://social.media:8444/conversationApi/conversations?memberId={memberId}&pageSize={pageSize}&pageNumber={pageNumber}",
+							"protocol": "https",
+							"host": [
+								"social",
+								"media"
+							],
+							"port": "8444",
+							"path": [
+								"conversationApi",
+								"conversations"
+							],
+							"query": [
+								{
+									"key": "memberId",
+									"value": "{memberId}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{pageSize}"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{pageNumber}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Conversation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"\",\r\n    \"members\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://social.media:8444/conversationApi/new"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Conversation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "https://social.media:8444/conversationApi/{conversationId}"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Conversation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"\"    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://social.media:8444/conversationApi/{conversationId}"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Conversation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "https://social.media:8445/connectionApi/{conversationId}"
+					},
+					"response": []
+				},
+				{
+					"name": "Search Conversation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://social.media:8445/connectionApi/search?name={name}&requesterId={requesterId}&pageSize={pageSize}&pageNumber={pageNumber}",
+							"protocol": "https",
+							"host": [
+								"social",
+								"media"
+							],
+							"port": "8445",
+							"path": [
+								"connectionApi",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{name}"
+								},
+								{
+									"key": "requesterId",
+									"value": "{requesterId}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{pageSize}"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{pageNumber}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth0/profileApi",
+			"item": [
+				{
+					"name": "Delete Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "https://social.media:8443/api/delete-profile/{userId}"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"key\": \"email_verified\",\r\n    \"value\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://social.media:8443/api/profile-update/{userId}"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"client_id\": \"\",\r\n    \"client_secret\": \"\",\r\n    \"audience\": \"\",\r\n    \"grant_type\": \"client_credentials\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://{domain}/oauth/token"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "memberApi",
+			"item": [
+				{
+					"name": "Delete Member",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "https://social.media:8444/memberApi/{memberId}"
+					},
+					"response": []
+				},
+				{
+					"name": "Get conversation members",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"memberIds:\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://social.media:8444/memberApi/members/{conversationId}"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Member From Conversation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"memberId\": \"\",\r\n    \"conversationId\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://social.media:8444/memberApi/members"
+					},
+					"response": []
+				},
+				{
+					"name": "Registration",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"memberId\": \"\",\r\n  \"firstName\": \"\",\r\n  \"lastName\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://social.media:8444/memberApi/new"
+					},
+					"response": []
+				},
+				{
+					"name": "Add member",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"memberId\": \"\",\r\n  \"conversationId\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://social.media:8444/memberApi/add"
+					},
+					"response": []
+				},
+				{
+					"name": "Search for new Members",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://social.media:8444/memberApi/search?name={name}&requesterId={requesterId}&pageSize={pageSize}&pageNumber={pageNumber}",
+							"protocol": "https",
+							"host": [
+								"social",
+								"media"
+							],
+							"port": "8444",
+							"path": [
+								"memberApi",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{name}"
+								},
+								{
+									"key": "requesterId",
+									"value": "{requesterId}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{pageSize}"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{pageNumber}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "messageApi",
+			"item": [
+				{
+					"name": "Get Pageable Messages From Conc",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://social.media:8444/messageApi/?conversationId={conversationId}&pageNumber={pageNumber}&pageSIze={pageSize}",
+							"protocol": "https",
+							"host": [
+								"social",
+								"media"
+							],
+							"port": "8444",
+							"path": [
+								"messageApi",
+								""
+							],
+							"query": [
+								{
+									"key": "conversationId",
+									"value": "{conversationId}"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{pageNumber}"
+								},
+								{
+									"key": "pageSIze",
+									"value": "{pageSize}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send test message",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"conversationId\": 0,\r\n    \"content\": \"\",\r\n    \"senderId\": 0    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://social.media:8444/messageApi/new"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete message",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "https://social.media:8444/messageApi/{messageId}"
+					},
+					"response": []
+				},
+				{
+					"name": "Update message",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"messageContent\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://social.media:8444/messageApi/{messageId}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "connectionApi",
+			"item": [
+				{
+					"name": "Get accepted connections",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "https://social.media:8445/connectionApi/connections/accepted/{userId}"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Connection status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"id\": \"\",\r\n  \"status\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://social.media:8445/connectionApi/update"
+					},
+					"response": []
+				},
+				{
+					"name": "Create new connection",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"initiatorId\": \"\",\r\n    \"targetId\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://social.media:8445/connectionApi/new"
+					},
+					"response": []
+				},
+				{
+					"name": "Get pending connections",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://social.media:8445/connectionApi/connections/pending?pageSize={pageSize}&pageNumber={pageNumber}&profileId={profileId}",
+							"protocol": "https",
+							"host": [
+								"social",
+								"media"
+							],
+							"port": "8445",
+							"path": [
+								"connectionApi",
+								"connections",
+								"pending"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "{pageSize}"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{pageNumber}"
+								},
+								{
+									"key": "profileId",
+									"value": "{profileId}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check connections",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"requesterId\": \"\",\r\n  \"targetIds\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://social.media:8445/connectionApi/checkConnectionsBatch"
+					},
+					"response": []
+				},
+				{
+					"name": "Check connection between users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://social.media:8445/connectionApi/checkConnection?currentUserId={currentUserId}&targetUserId={targetUserId}",
+							"protocol": "https",
+							"host": [
+								"social",
+								"media"
+							],
+							"port": "8445",
+							"path": [
+								"connectionApi",
+								"checkConnection"
+							],
+							"query": [
+								{
+									"key": "currentUserId",
+									"value": "{currentUserId}"
+								},
+								{
+									"key": "targetUserId",
+									"value": "{targetUserId}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "postApi",
+			"item": [
+				{
+					"name": "Get Posts From Connections",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "httpss://social.media:8445/postApi/home?profileId={profileId}&pageNumber={pageNumber}&pageSize={pageSize}",
+							"protocol": "httpss",
+							"host": [
+								"social",
+								"media"
+							],
+							"port": "8445",
+							"path": [
+								"postApi",
+								"home"
+							],
+							"query": [
+								{
+									"key": "profileId",
+									"value": "{profileId}"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{pageNumber}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{pageSize}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Posts From User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://social.media:8445/postApi/activity?profileId={profileId}&pageNumber={pageNumber}&pageSize={pageSize}",
+							"protocol": "https",
+							"host": [
+								"social",
+								"media"
+							],
+							"port": "8445",
+							"path": [
+								"postApi",
+								"activity"
+							],
+							"query": [
+								{
+									"key": "profileId",
+									"value": "{profileId}"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{pageNumber}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{pageSize}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"profileId\": \"\",\r\n    \"content\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://social.media:8445/postApi/new"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "https://social.media:8445/postApi/{postId}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Social-profile/profileApi",
+			"item": [
+				{
+					"name": "Create profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"profileId\": \"\",\r\n    \"introduction\": \"\",\r\n    \"gender\": \"\",\r\n    \"firstName\": \"\",\r\n    \"lastName\": \"\",\r\n    \"picture\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://social.media:8445/profileApi/new"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "https://social.media:8445/profileApi/{profileId}"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "https://social.media:8445/profileApi/{usedId}"
+					},
+					"response": []
+				},
+				{
+					"name": "Update introduction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"profileId\": \"\",\r\n    \"introduction\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://social.media:8445/profileApi/introduction/{profileId}"
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://social.media:8445/profileApi/search?name={name}&pageNumber={pageNumber}&pageSize={pageSize}",
+							"protocol": "https",
+							"host": [
+								"social",
+								"media"
+							],
+							"port": "8445",
+							"path": [
+								"profileApi",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{name}"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{pageNumber}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{pageSize}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "voteApi",
+			"item": [
+				{
+					"name": "Add vote",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"profileId\": \"\",\r\n    \"postId\": 0,\r\n    \"vote\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://social.media:8445/voteApi/vote"
+					},
+					"response": []
+				},
+				{
+					"name": "Check vote",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://social.media:8445/voteApi/{profileId}/{postId}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "notificationApi",
+			"item": [
+				{
+					"name": "List notifications",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://social.media:8445/notificationApi/notifications?userId={userId}&pageNumber={pageNumber}&pageSize={pageSize}",
+							"protocol": "https",
+							"host": [
+								"social",
+								"media"
+							],
+							"port": "8445",
+							"path": [
+								"notificationApi",
+								"notifications"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{userId}"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{pageNumber}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{pageSize}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "userId",
+			"value": "6771a216a6339380c80b75a1"
+		},
+		{
+			"key": "conversationId",
+			"value": "410440",
+			"type": "default"
+		},
+		{
+			"key": "memberId",
+			"value": "1",
+			"type": "default"
+		},
+		{
+			"key": "new_id",
+			"value": "20",
+			"type": "default"
+		},
+		{
+			"key": "conversation_name",
+			"value": "Test chat",
+			"type": "default"
+		},
+		{
+			"key": "messageId",
+			"value": "2",
+			"type": "default"
+		},
+		{
+			"key": "profileId",
+			"value": "'user1'",
+			"type": "default"
+		},
+		{
+			"key": "postId",
+			"value": "1",
+			"type": "default"
+		}
+	]
+}
