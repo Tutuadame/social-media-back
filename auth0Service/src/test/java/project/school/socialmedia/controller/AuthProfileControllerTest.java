@@ -1,17 +1,13 @@
 package project.school.socialmedia.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.server.ResponseStatusException;
 import project.school.socialmedia.dto.request.UpdateProfileRequest;
 import project.school.socialmedia.exception.TokenServiceException;
@@ -33,18 +29,14 @@ class AuthProfileControllerTest {
 
   @InjectMocks
   private AuthProfileController authProfileController;
-
-  private MockMvc mockMvc;
-  private ObjectMapper objectMapper;
+  
   private final String TEST_USER_ID = "user123";
   private final String TEST_TOKEN = "valid.test.token";
   private final String TEST_RESPONSE = "Profile updated successfully";
 
   @BeforeEach
   void setUp() {
-    MockitoAnnotations.openMocks(this);
-    mockMvc = MockMvcBuilders.standaloneSetup(authProfileController).build();
-    objectMapper = new ObjectMapper();
+    MockitoAnnotations.openMocks(this);    
   }
 
   @Test

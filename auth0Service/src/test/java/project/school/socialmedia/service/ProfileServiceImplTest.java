@@ -1,4 +1,4 @@
-package project.school.socialmedia.service.impl;
+package project.school.socialmedia.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,10 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.util.ReflectionTestUtils;
 import project.school.socialmedia.dto.request.UpdateProfileRequest;
-import project.school.socialmedia.service.RequestMethod;
+import project.school.socialmedia.service.impl.ProfileServiceImpl;
 import project.school.socialmedia.util.RequestUtils;
 import project.school.socialmedia.util.ServiceUtils;
 

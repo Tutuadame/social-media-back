@@ -22,3 +22,5 @@ gradle-app.setting
 .idea
 *.env
 /kafka_2.13-4.0.0
+/bin/
+.vscode
