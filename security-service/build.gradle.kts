@@ -6,16 +6,17 @@ plugins {
 
 group = "project.school.socialmedia"
 version = "0.0.1-SNAPSHOT"
-
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
-}
+description = "Demo project for Spring Boot"
 
 configurations {
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())
+	}
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
 
@@ -26,14 +27,15 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	compileOnly("org.projectlombok:lombok")
-	runtimeOnly("com.h2database:h2")
-	runtimeOnly("org.postgresql:postgresql")
+	implementation("com.auth0:auth0-spring-security-api:1.4.0")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4")
+	implementation("org.springframework.kafka:spring-kafka")
+	implementation("org.projectlombok:lombok")
+	implementation("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	implementation("org.springframework.kafka:spring-kafka")
-	implementation("com.auth0:auth0-spring-security-api:1.4.0")
+	runtimeOnly("com.h2database:h2")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 	implementation("com.auth0:java-jwt:4.4.0")
 }

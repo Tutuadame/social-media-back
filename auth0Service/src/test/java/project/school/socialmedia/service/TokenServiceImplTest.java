@@ -1,4 +1,4 @@
-package project.school.socialmedia.service.impl;
+package project.school.socialmedia.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -8,11 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.util.ReflectionTestUtils;
 import project.school.socialmedia.dto.response.TokenResponse;
 import project.school.socialmedia.exception.TokenServiceException;
-import project.school.socialmedia.service.RequestMethod;
+import project.school.socialmedia.service.impl.TokenServiceImpl;
 import project.school.socialmedia.util.RequestException;
 import project.school.socialmedia.util.RequestUtils;
 import project.school.socialmedia.util.ServiceUtils;
