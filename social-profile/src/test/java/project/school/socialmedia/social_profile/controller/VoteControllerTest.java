@@ -7,11 +7,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import project.school.socialmedia.controller.VoteController;
-import project.school.socialmedia.dto.request.vote.CreateVoteRequest;
-import project.school.socialmedia.dto.response.post.PostResponse;
-import project.school.socialmedia.dto.response.vote.CheckVoteResponse;
-import project.school.socialmedia.service.VoteService;
+
+import project.school.socialprofile.controller.VoteController;
+import project.school.socialprofile.dto.request.vote.CreateVoteRequest;
+import project.school.socialprofile.dto.response.post.PostResponse;
+import project.school.socialprofile.dto.response.vote.CheckVoteResponse;
+import project.school.socialprofile.service.VoteService;
 
 import java.time.LocalDateTime;
 

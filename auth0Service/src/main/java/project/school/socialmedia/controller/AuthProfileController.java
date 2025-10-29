@@ -15,7 +15,6 @@ import project.school.socialmedia.service.impl.TokenServiceImpl;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "https://social.media:3000")
 public class AuthProfileController {
 
   private final ProfileService profileService;
@@ -30,8 +29,8 @@ public class AuthProfileController {
 
   @PatchMapping("/profile-update/{id}")
   public ResponseEntity<String> updateProfile(
-          @RequestBody UpdateProfileRequest updateProfileRequest,
-          @PathVariable String id
+          @RequestBody(required = true) UpdateProfileRequest updateProfileRequest,
+          @PathVariable(name = "id") String id
   ) throws JsonProcessingException {
     setToken();
     String responseBody = profileService.updateUser(updateProfileRequest, id, clientToken);
@@ -39,7 +38,7 @@ public class AuthProfileController {
   }
 
   @DeleteMapping("/delete-profile/{id}")
-  public ResponseEntity<String> deleteProfile(@PathVariable String id) {
+  public ResponseEntity<String> deleteProfile(@PathVariable(name = "id") String id) {
     setToken();
     String responseBody = profileService.deleteUser(id, clientToken);
     return ResponseEntity.status(HttpStatus.OK).body(responseBody);

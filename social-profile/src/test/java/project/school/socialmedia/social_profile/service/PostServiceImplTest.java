@@ -9,16 +9,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import project.school.socialmedia.domain.Connection;
-import project.school.socialmedia.domain.ConnectionStatusEnum;
-import project.school.socialmedia.domain.Post;
-import project.school.socialmedia.domain.Profile;
-import project.school.socialmedia.dto.response.post.PostResponse;
-import project.school.socialmedia.repository.ConnectionRepository;
-import project.school.socialmedia.repository.PostRepository;
-import project.school.socialmedia.repository.ProfileRepository;
-import project.school.socialmedia.repository.VoteRepository;
-import project.school.socialmedia.service.impl.PostServiceImpl;
+
+import project.school.socialprofile.domain.Connection;
+import project.school.socialprofile.domain.ConnectionStatusEnum;
+import project.school.socialprofile.domain.Post;
+import project.school.socialprofile.domain.Profile;
+import project.school.socialprofile.dto.response.post.PostResponse;
+import project.school.socialprofile.repository.ConnectionRepository;
+import project.school.socialprofile.repository.PostRepository;
+import project.school.socialprofile.repository.ProfileRepository;
+import project.school.socialprofile.repository.VoteRepository;
+import project.school.socialprofile.service.impl.PostServiceImpl;
 
 import java.util.Arrays;
 import java.util.Collections;

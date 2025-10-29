@@ -10,13 +10,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import project.school.socialmedia.controller.ProfileController;
-import project.school.socialmedia.dto.request.profile.CreateProfileRequest;
-import project.school.socialmedia.dto.request.profile.UpdateIntroductionRequest;
-import project.school.socialmedia.dto.response.profile.GenericProfileResponse;
-import project.school.socialmedia.dto.response.profile.ProfileResponse;
-import project.school.socialmedia.dto.response.profile.UpdateIntroductionResponse;
-import project.school.socialmedia.service.ProfileService;
+
+import project.school.socialprofile.controller.ProfileController;
+import project.school.socialprofile.dto.request.profile.CreateProfileRequest;
+import project.school.socialprofile.dto.request.profile.UpdateIntroductionRequest;
+import project.school.socialprofile.dto.response.profile.BasicProfileResponse;
+import project.school.socialprofile.dto.response.profile.ProfileResponse;
+import project.school.socialprofile.dto.response.profile.UpdateIntroductionResponse;
+import project.school.socialprofile.service.ProfileService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -149,21 +150,21 @@ class ProfileControllerTest {
     int pageNumber = 0;
     int pageSize = 10;
 
-    List<GenericProfileResponse> profiles = Arrays.asList(
-            new GenericProfileResponse("user123", "John", "Doe", "picture1.jpg"),
-            new GenericProfileResponse("user456", "John", "Smith", "picture2.jpg")
+    List<BasicProfileResponse> profiles = Arrays.asList(
+            new BasicProfileResponse("user123", "John", "Doe", "picture1.jpg"),
+            new BasicProfileResponse("user456", "John", "Smith", "picture2.jpg")
     );
-    Page<GenericProfileResponse> expectedPage = new PageImpl<>(profiles);
+    Page<BasicProfileResponse> expectedPage = new PageImpl<>(profiles);
 
     when(profileService.searchByName(eq(name), any(Pageable.class))).thenReturn(expectedPage);
 
     // Act
-    ResponseEntity<Page<GenericProfileResponse>> response =
+    ResponseEntity<Page<BasicProfileResponse>> response =
             profileController.searchProfileByName(name, pageNumber, pageSize);
 
     // Assert
     assertEquals(HttpStatus.OK, response.getStatusCode());
-    Page<GenericProfileResponse> actualPage = response.getBody();
+    Page<BasicProfileResponse> actualPage = response.getBody();
     assertNotNull(actualPage);
     assertEquals(2, actualPage.getContent().size());
     assertEquals("user123", actualPage.getContent().getFirst().getId());

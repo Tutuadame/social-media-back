@@ -10,14 +10,15 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import project.school.socialmedia.controller.ConnectionsController;
-import project.school.socialmedia.dto.request.connections.CheckConnectionsBatchRequest;
-import project.school.socialmedia.dto.request.connections.CreateConnectionRequest;
-import project.school.socialmedia.dto.request.connections.UpdateConnectionsStatusRequest;
-import project.school.socialmedia.dto.response.connection.CheckConnectionsBatchResponse;
-import project.school.socialmedia.dto.response.connection.ConnectionResponse;
-import project.school.socialmedia.dto.response.connection.UpdateConnectionStatusResponse;
-import project.school.socialmedia.service.ConnectionService;
+
+import project.school.socialprofile.controller.ConnectionsController;
+import project.school.socialprofile.dto.request.connections.CheckConnectionsBatchRequest;
+import project.school.socialprofile.dto.request.connections.CreateConnectionRequest;
+import project.school.socialprofile.dto.request.connections.UpdateConnectionsStatusRequest;
+import project.school.socialprofile.dto.response.connection.CheckConnectionsBatchResponse;
+import project.school.socialprofile.dto.response.connection.ConnectionResponse;
+import project.school.socialprofile.dto.response.connection.UpdateConnectionStatusResponse;
+import project.school.socialprofile.service.ConnectionService;
 
 import java.util.ArrayList;
 import java.util.Arrays;

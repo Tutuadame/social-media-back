@@ -22,9 +22,9 @@ public class NotificationController {
 
   @GetMapping("/notifications")
   public ResponseEntity<Page<NotificationResponse>> listNotifications(
-          @RequestParam(defaultValue = "10") int pageSize,
-          @RequestParam int pageNumber,
-          @RequestParam String userId
+          @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+          @RequestParam(name = "pageNumber") int pageNumber,
+          @RequestParam(name = "userId") String userId
   ){
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     return ResponseEntity.status(HttpStatus.OK).body(

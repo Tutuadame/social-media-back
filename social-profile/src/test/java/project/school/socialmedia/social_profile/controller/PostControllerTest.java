@@ -10,10 +10,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import project.school.socialmedia.controller.PostController;
-import project.school.socialmedia.dto.request.post.CreatePostRequest;
-import project.school.socialmedia.dto.response.post.PostResponse;
-import project.school.socialmedia.service.PostService;
+
+import project.school.socialprofile.controller.PostController;
+import project.school.socialprofile.dto.request.post.CreatePostRequest;
+import project.school.socialprofile.dto.response.post.PostResponse;
+import project.school.socialprofile.service.PostService;
 
 import java.time.LocalDateTime;
 import java.util.Collections;

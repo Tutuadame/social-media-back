@@ -2,6 +2,20 @@ package project.school.socialmedia.social_profile.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import project.school.socialprofile.config.KafkaConfigProps;
+import project.school.socialprofile.domain.Connection;
+import project.school.socialprofile.domain.ConnectionStatusEnum;
+import project.school.socialprofile.domain.Profile;
+import project.school.socialprofile.dto.kafka.Notification;
+import project.school.socialprofile.dto.request.connections.CreateConnectionRequest;
+import project.school.socialprofile.dto.request.connections.UpdateConnectionsStatusRequest;
+import project.school.socialprofile.dto.response.connection.ConnectionResponse;
+import project.school.socialprofile.dto.response.connection.UpdateConnectionStatusResponse;
+import project.school.socialprofile.repository.ConnectionRepository;
+import project.school.socialprofile.repository.ProfileRepository;
+import project.school.socialprofile.service.impl.ConnectionServiceImpl;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,18 +26,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.core.KafkaTemplate;
-import project.school.socialmedia.config.KafkaConfigProps;
-import project.school.socialmedia.domain.Connection;
-import project.school.socialmedia.domain.ConnectionStatusEnum;
-import project.school.socialmedia.domain.Profile;
-import project.school.socialmedia.dto.kafka.Notification;
-import project.school.socialmedia.dto.request.connections.CreateConnectionRequest;
-import project.school.socialmedia.dto.request.connections.UpdateConnectionsStatusRequest;
-import project.school.socialmedia.dto.response.connection.ConnectionResponse;
-import project.school.socialmedia.dto.response.connection.UpdateConnectionStatusResponse;
-import project.school.socialmedia.repository.ConnectionRepository;
-import project.school.socialmedia.repository.ProfileRepository;
-import project.school.socialmedia.service.impl.ConnectionServiceImpl;
 
 import java.util.Arrays;
 import java.util.Collections;

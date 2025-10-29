@@ -9,14 +9,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import project.school.socialmedia.domain.GenderEnum;
-import project.school.socialmedia.domain.Profile;
-import project.school.socialmedia.dto.request.profile.CreateProfileRequest;
-import project.school.socialmedia.dto.response.profile.GenericProfileResponse;
-import project.school.socialmedia.dto.response.profile.ProfileResponse;
-import project.school.socialmedia.dto.response.profile.UpdateIntroductionResponse;
-import project.school.socialmedia.repository.ProfileRepository;
-import project.school.socialmedia.service.impl.ProfileServiceImpl;
+
+import project.school.socialprofile.domain.GenderEnum;
+import project.school.socialprofile.domain.Profile;
+import project.school.socialprofile.dto.request.profile.CreateProfileRequest;
+import project.school.socialprofile.dto.response.profile.BasicProfileResponse;
+import project.school.socialprofile.dto.response.profile.ProfileResponse;
+import project.school.socialprofile.dto.response.profile.UpdateIntroductionResponse;
+import project.school.socialprofile.repository.ProfileRepository;
+import project.school.socialprofile.service.impl.ProfileServiceImpl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -215,7 +216,7 @@ class ProfileServiceImplTest {
     when(profileRepository.searchByName(eq(name), any(Pageable.class))).thenReturn(profilePage);
 
     // Act
-    Page<GenericProfileResponse> results = profileService.searchByName(name, pageable);
+    Page<BasicProfileResponse> results = profileService.searchByName(name, pageable);
 
     // Assert
     assertNotNull(results);
