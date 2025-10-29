@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.school.socialmedia.dto.request.message.CreateMessageRequest;
-import project.school.socialmedia.dto.request.message.GetMessagesRequest;
 import project.school.socialmedia.dto.request.message.UpdateMessageRequest;
 import project.school.socialmedia.dto.response.message.MessageResponse;
 import project.school.socialmedia.dto.response.message.SimpleMessageResponse;

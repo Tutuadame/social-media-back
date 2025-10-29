@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -149,7 +148,7 @@ class ConversationControllerTest {
 
     // Act
     ResponseEntity<Page<SimpleConversationResponse>> response =
-            conversationController.getConversations(memberId, pageNumber, pageSize);
+            conversationController.getConversations(memberId, pageSize, pageNumber);
 
     // Assert
     assertEquals(HttpStatus.OK, response.getStatusCode());

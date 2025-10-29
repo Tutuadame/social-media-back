@@ -33,7 +33,6 @@ public class MemberServiceImpl implements MemberService {
   private final ConversationRepository conversationRepository;
   private final RestTemplate restTemplate;
   private static final String DELETE_SUCCESS = "Delete was successful!";
-  private static final String DELETE_WITH_CONVERSATION_SUCCESS = "Member and Conversation was successfully deleted!";
   private static final String MEMBER_NOT_FOUND = "Member not found!";
   private static final String CONVERSATION_NOT_FOUND = "Conversation not found!";
 
