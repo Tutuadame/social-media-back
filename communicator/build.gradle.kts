@@ -4,6 +4,9 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.7"
 }
 
+group = "project.school.socialmedia"
+version = "0.0.1-SNAPSHOT"
+
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(21)
