@@ -1,6 +1,5 @@
 package project.school.socialmedia.util;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import project.school.socialmedia.dto.request.UpdateProfileRequest;
 import project.school.socialmedia.service.RequestMethod;

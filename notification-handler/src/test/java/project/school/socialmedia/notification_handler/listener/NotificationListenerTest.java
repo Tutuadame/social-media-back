@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 import project.school.socialmedia.domain.Notification;
 import project.school.socialmedia.listener.NotificationListener;
 import project.school.socialmedia.service.NotificationService;
